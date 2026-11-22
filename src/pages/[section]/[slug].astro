@@ -62,7 +62,7 @@ const breadcrumbs = [
 <SiteLayout title={title} description={description} current={guide ? '/huong-dan/' : '/thu-vien/'}>
   <Breadcrumbs items={breadcrumbs} />
   <article class="profile">
-    <header class="profile-header">
+    <header class="profile-header" data-category={category}>
       {!guide && category !== 'quests' && <GameImage record={record} slot={primarySlot(record)} shape={hero ? 'portrait' : 'icon'} eager />}
       <div>
         <p class="profile-category">

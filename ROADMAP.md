@@ -1,11 +1,11 @@
 # Roadmap CoLQ 2.0
 
-Phạm vi đã giao dừng sau M1 local. M0 đã đồng bộ lên GitHub. M1 nằm trên nhánh local `m1/library` để nghiệm thu.
+M0 đã có trên GitHub. M1 được chốt trên `m1/library` để review trước khi hợp nhất. Nền xác thực M2A theo nhánh local riêng.
 
 | Milestone | Trạng thái | Tiêu chí chính |
 | --- | --- | --- |
 | M0 · Audit và bootstrap | DONE | Đã xác minh `origin/main` tại commit `8b90f8f36b395671e1f92935a0e3c6ce636a1bd2`. |
-| M1 · Thư viện và kiểm tra tương đương | DONE | Hoàn tất và kiểm thử local trên `m1/library`. Chờ chủ dự án duyệt trước khi push hoặc chuyển sang M2. |
+| M1 · Thư viện và kiểm tra tương đương | DONE | Hoàn tất và kiểm thử trên `m1/library`. Chủ dự án đã duyệt push nhánh để mở PR. |
 | M2 · Đăng nhập và Creator Studio | NOT STARTED | Spike runtime/auth, phân quyền theo chủ sở hữu, xuất bản bài, lưu lịch sử và bảo vệ nháp |
 | M3 · Tương tác và kiểm duyệt | NOT STARTED | Reaction duy nhất, bình luận hai cấp, báo cáo, phân quyền và chống lạm dụng |
 | M4 · Bình chọn yêu thích | NOT STARTED | Gắn hồ sơ thư viện, một phiếu, đổi phiếu trước khi đóng, kết quả lịch sử |

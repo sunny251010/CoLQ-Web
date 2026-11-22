@@ -360,6 +360,7 @@ input[type='search']::placeholder { color: var(--color-muted); }
 .catalog-group { margin-block: var(--space-4) 2rem; scroll-margin-block-start: 1rem; }
 .record-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr)); gap: var(--space-3); }
 .record-grid--heroes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.record-grid--augments { grid-template-columns: minmax(0, 1fr); }
 
 .record-card {
   display: grid;
@@ -387,6 +388,8 @@ input[type='search']::placeholder { color: var(--color-muted); }
 }
 
 .record-card--hero .record-card-body { padding: var(--space-3); }
+.record-grid--augments .record-card { grid-template-columns: minmax(0, 1fr); }
+.record-grid--augments .record-card-body { overflow-wrap: anywhere; }
 .record-card:hover,
 .record-card:focus-within { border-color: var(--color-accent); }
 .record-card-title { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); justify-content: space-between; align-items: baseline; }
@@ -422,6 +425,8 @@ input[type='search']::placeholder { color: var(--color-muted); }
 }
 
 .game-image--icon { width: 3.5rem; aspect-ratio: 1; border-radius: var(--radius); }
+:is(.record-card, .profile-header):is([data-category='traits'], [data-category='equipment']) > .game-image--icon { width: 72px; }
+:is(.record-card, .profile-header)[data-category='augments'] > .game-image--icon { width: 100px; }
 .game-image--portrait { width: 100%; aspect-ratio: 1; }
 .game-image--badge { flex: 0 0 1.25rem; width: 1.25rem; height: 1.25rem; border-radius: 0.2rem; }
 .game-image--badge .image-fallback { font-size: 0.6rem; }
@@ -544,9 +549,14 @@ input[type='search']::placeholder { color: var(--color-muted); }
 .star-picker label { display: inline-flex; align-items: center; min-height: var(--target-min); gap: var(--space-1); }
 .star-picker input { accent-color: var(--color-accent); }
 
+@media (min-width: 20rem) {
+  .record-grid--augments { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 @media (min-width: 40rem) {
   .directory-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .record-grid--heroes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .record-grid--augments .record-card { grid-template-columns: auto minmax(0, 1fr); }
 }
 
 @media (min-width: 56rem) {

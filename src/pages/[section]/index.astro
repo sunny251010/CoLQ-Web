@@ -56,7 +56,9 @@ const groups = category === 'equipment' ? catalog.equipmentGroups.map(({ id, lab
           <h2 id={`${anchor}-heading`}>{label}</h2>
           <span class="muted"><span data-group-count>{rows.length}</span> hồ sơ</span>
         </header>
-        <div class="record-grid">{rows.map((record) => <RecordCard record={record} />)}</div>
+        <div class:list={['record-grid', category === 'augments' && 'record-grid--augments']}>
+          {rows.map((record) => <RecordCard record={record} />)}
+        </div>
       </section>
     )) : (
       <div class:list={['record-grid', category === 'heroes' && 'record-grid--heroes']}>

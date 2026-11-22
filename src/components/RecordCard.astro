@@ -25,6 +25,7 @@ const search = normalizeSearch([
 
 <article
   class:list={['record-card', hero && 'record-card--hero', equipment && 'equipment-card']}
+  data-category={record.category}
   data-record-id={record.id}
   data-search={search}
   data-price={record.price ?? ''}

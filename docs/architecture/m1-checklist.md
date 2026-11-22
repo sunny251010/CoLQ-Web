@@ -15,13 +15,14 @@ M1 triển khai local trên nhánh `m1/library`, sau khi M0 được đồng b�
 
 - `/huong-dan/` giữ nguyên URL landing và lối vào ba bài cũ. Trang chủ mới có ô tìm toàn thư viện. Giữ URL cũ làm canonical khi build production, nên việc chuyển host chưa cần redirect đường dẫn nội bộ.
 - Chốt phạm vi dùng ảnh và nguồn bảo chứng. Manifest tự ghi `rights.status=UNVERIFIED`. Đối chiếu ảnh trên local theo quyền hiện có. Nghiệm thu ảnh trên môi trường công khai còn phụ thuộc phê duyệt.
-- Chốt quyền push M1, host production và staging trước khi chuyển sang nghiệm thu từ xa. M0 đã có trên GitHub.
+- Chủ dự án đã duyệt push nhánh M1 để review. Host production và staging cần xác nhận trước khi triển khai từ xa.
 
 Mốc sau M1 theo [ROADMAP](../../ROADMAP.md). Hoàn thành M1 cần kết quả chạy thực tế và review của chủ dự án trước M2.
 
 ## Đối chiếu triển khai
 
 - Giữ 221 URL HTML và hai URL JSON của CoLQ cũ. Tổng bản build mới là 226 trang HTML. Năm trang mới gồm Thư viện, Đội hình, Công cụ, Bình chọn và Liên hệ. `/huong-dan/` chứa ba bài gốc. `/gioi-thieu/#intro-0` đến `#intro-2`, các mốc nhóm trang bị và nhóm lõi giữ được anchor.
+- Sitemap production có 221 URL vì năm HTML dùng `noindex` là `/404.html`, `/lien-he/`, `/doi-hinh/`, `/cong-cu/` và `/binh-chon/`. Ba trang cuối hiển thị trạng thái chờ bài đội hình, công cụ xây đội hình và cuộc bình chọn. Trang Hướng dẫn vẫn có ba bài gốc và thông báo chưa có bài cộng đồng mới. Auth, Creator Studio, reaction và bình luận thuộc các milestone sau.
 - JSON công khai và provenance ở bản build mới trùng byte với baseline đã kiểm toán. Giữ 210 chính và 1 phụ, 121 liên kết Phe/Nghề hai chiều, 4 tham chiếu phần thưởng và 4 số lượng mặc định có nhãn. Hai Volkath 5 và 6 vàng có URL riêng.
 - Pin toàn bộ manifest R2. Bản build M1 và bản CoLQ cũ có bản sửa SVG cùng tham chiếu đúng một tập 256 URL ảnh phân biệt. Giữ đủ 744 ánh xạ tới 269 đối tượng trong manifest. 15 vị trí thưởng vàng trong trang chi tiết dùng SVG như bản sửa local.
 - Trình duyệt giới hạn tải ảnh qua lazy loading, giữ chiều rộng và chiều cao từ manifest, rồi dùng chữ viết tắt của hồ sơ khi ảnh lỗi. Không có ảnh PNG game bên trong `dist/`.
@@ -36,6 +37,7 @@ Mốc sau M1 theo [ROADMAP](../../ROADMAP.md). Hoàn thành M1 cần kết quả
 | Kiểm tra dữ liệu đi kèm build | PASS. SHA-256 của snapshot, manifest và provenance, số hồ sơ, trạng thái, quan hệ, URL, 744 vị trí ảnh. |
 | Chrome 157.0.8103.80 qua Playwright | PASS ở 360, 390, 768, 1024 và 1440 px. Sáu mục điều hướng, năm danh mục, hồ sơ, bàn phím, skip link, nhãn bộ lọc và chiều rộng đều đạt. Đã kiểm tra tìm có/không dấu, lọc, đặt lại, reload/back, làm nổi bật cấp sao, bấm hoặc chạm toàn ô trang bị, mở bằng Enter, SVG vàng, liên kết hai chiều và 404. |
 | Nội dung không có JavaScript và ảnh lỗi | PASS. Danh mục vẫn có 58 quân cờ và liên kết hồ sơ khi tắt JavaScript. Giả lập ảnh R2 trả 404 làm ẩn ảnh hỏng, hiện fallback và giữ nội dung hồ sơ. |
+| Kích thước ảnh và lưới danh mục | PASS. Ảnh chính Phe/Nghề và Trang bị 72 × 72 px, ảnh Lõi 100 × 100 px ở danh mục và hồ sơ. Lõi hai cột từ 320 px, một cột ở 280 px. Kiểm tra 280, 320, 360, 390, 768, 1024 và 1440 px không tràn ngang. [Desktop](evidence/m1-loi-1440.png) · [Mobile](evidence/m1-loi-390.png) |
 | HTTP chỉ đọc R2 | PASS. Manifest live trùng byte bản ghim. HEAD 269/269 trả 200 với MIME và số byte đúng. Sáu GET mẫu trùng SHA-256. Key thiếu trả 404. |
 | SEO local với chế độ staging và cấu hình production thử nghiệm | PASS. Bản staging dùng `noindex` và sitemap rỗng. Bản production thử với origin dành cho test có 221 canonical indexable. Trang 404, liên hệ và các chức năng chưa mở vẫn `noindex`. Thiếu origin HTTPS làm dừng build production. |
 | Miniflare / workerd local | PASS. Mô phỏng Workers Static Assets bằng Miniflare 4.20260730.0 với ngày tương thích 30/07/2026. Kiểm tra HTML và JSON 200, chính sách `noindex`, 404 và chuẩn hóa dấu gạch cuối URL có giữ query. |
@@ -55,4 +57,4 @@ Mốc sau M1 theo [ROADMAP](../../ROADMAP.md). Hoàn thành M1 cần kết quả
 | Tài liệu | `README.md`, `ROADMAP.md`, `DECISIONS.md`, `docs/planning/CoLQ_Product_Spec_v1.md`, `docs/architecture/{data-inventory,m0-audit,m1-checklist}.md` |
 | Ảnh nghiệm thu | Ảnh trang chủ và danh sách quân cờ ở 1440 và 390 px trong `docs/architecture/evidence/` |
 
-Trên GitHub, `origin/main` vẫn ở M0. M1 được giữ dưới dạng thay đổi local ở `m1/library`. Để hoàn tác bản preview, dùng artifact hoặc checkout M0 đã ghim trên một thư mục riêng. Bản dữ liệu và manifest M1 giữ hash để tái tạo sau khi nghiệm thu.
+`main` giữ mốc M0 trong thời gian review. Nhánh `m1/library` chứa phần thư viện và điều chỉnh ảnh đã kiểm thử. Để hoàn tác bản preview, dùng artifact hoặc checkout M0 đã ghim trên một thư mục riêng. Bản dữ liệu và manifest M1 giữ hash để tái tạo sau khi nghiệm thu.
