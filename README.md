@@ -24,7 +24,16 @@ Các trang tra cứu gồm `/thu-vien/`, `/quan-co/`, `/phe-nghe/`, `/trang-bi/`
 
 ## Cấu hình SEO
 
-Cloudflare Workers Builds dùng nhánh `preview/cloudflare` của `sunny251010/CoLQ-Web` cho Worker `colq-web-preview`. Lệnh build là `npm run build && npm run verify:build`, lệnh deploy là `npx wrangler deploy --config wrangler.jsonc`. Worker phục vụ thư viện tĩnh và dùng cấu hình SEO staging. Nền tài khoản M2A được kiểm thử riêng trên local.
+Cloudflare Workers Builds dùng nhánh `preview/cloudflare` của `sunny251010/CoLQ-Web` cho Worker `colq-web-preview`. Trong **Settings → Builds**, đặt **Production branch** thành `preview/cloudflare`. Push lên nhánh đó sẽ kích hoạt triển khai. Điều kiện `WORKERS_CI_BRANCH` trong lệnh build bảo đảm Worker chỉ nhận bản build từ nhánh này.
+
+```sh
+# Build
+test "$WORKERS_CI_BRANCH" = preview/cloudflare && npm run build && npm run verify:build
+# Deploy
+npx wrangler deploy --config wrangler.jsonc
+```
+
+Worker phục vụ thư viện tĩnh và dùng cấu hình SEO staging. Nền tài khoản M2A được kiểm thử riêng trên local.
 
 Build mặc định dùng chế độ staging và gắn `noindex, follow`. Khi chuẩn bị bản production, đặt `COLQ_ENV=production` cùng `COLQ_SITE_URL` là origin HTTPS chính thức. Build sẽ dừng nếu thiếu origin hoặc origin sai định dạng. Canonical và sitemap được sinh từ origin đã cấu hình. Trang 404 và các trang chưa có nghiệp vụ vẫn dùng `noindex`.
 
