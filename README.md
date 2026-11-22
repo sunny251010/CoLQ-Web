@@ -2,6 +2,8 @@
 
 Website cộng đồng Cờ Liên Quân trên CoLQ-Web. Thư viện tĩnh dùng dữ liệu quan sát từ repo `sunny251010/CoLQ` và URL ảnh từ manifest R2 đã ghim.
 
+Menu chính gồm Trang chủ, Đội hình, Hướng dẫn & Mẹo, Thư viện, Liên hệ & Góp ý theo thứ tự này. Mặc định sửa, kiểm thử và commit local. Push hoặc deploy theo yêu cầu riêng.
+
 ## Chạy local
 
 Dùng Node.js 24 hoặc Node.js 22 từ 22.12. Trên PowerShell, dùng `npm.cmd`.
@@ -41,7 +43,7 @@ Build mặc định dùng chế độ staging và gắn `noindex, follow`. Khi c
 
 | Đường dẫn | Vai trò |
 | --- | --- |
-| `src/pages/` | Sáu điểm vào, danh mục, hồ sơ, 404 và endpoint JSON/SEO tĩnh |
+| `src/pages/` | Năm trang chính, danh mục, hồ sơ, 404 và endpoint JSON/SEO tĩnh |
 | `src/layouts/` | Layout chung, metadata và khung điều hướng thư viện |
 | `src/components/SiteNav.astro` · `src/navigation.ts` | Component điều hướng và danh sách nhãn/URL dùng chung |
 | `src/styles/` | Tokens Dark Gaming UI, layout tra cứu, focus và breakpoint |

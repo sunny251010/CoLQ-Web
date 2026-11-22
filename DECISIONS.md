@@ -2,14 +2,16 @@
 
 Chủ dự án đã duyệt push M0 lên `main` và đưa `m1/library` lên GitHub để review M1. M2A được giao trên nhánh local riêng sau khi có mốc M1 đã kiểm thử.
 
+Mặc định thực hiện và commit ở local. Chỉ push hoặc deploy khi chủ dự án yêu cầu rõ cho lần phát hành đó.
+
 | Trạng thái | Quyết định |
 | --- | --- |
 | CONFIRMED | `sunny251010/CoLQ-Web` là đích cho website mới. `sunny251010/CoLQ` được khảo sát chỉ đọc để giữ dữ liệu, asset, URL và bản sửa còn giá trị. Thay thế hướng triển khai trực tiếp trong repo cũ. |
 | CONFIRMED | M0 gồm audit, scaffold Astro + TypeScript, tokens Dark Gaming UI, sáu điểm vào công khai và thiết kế kỹ thuật. Thay thế phạm vi M0 chỉ audit trong prompt cũ. |
-| CONFIRMED | Website cộng đồng không quảng cáo, đọc công khai và có sáu nav theo Product Spec. Nội dung game và mùa cần nguồn kiểm chứng. |
+| CONFIRMED | Website cộng đồng không quảng cáo, đọc công khai. Menu chính hiện có năm mục theo thứ tự Trang chủ → Đội hình → Hướng dẫn & Mẹo → Thư viện → Liên hệ & Góp ý. Nội dung game và mùa cần nguồn kiểm chứng. Thay thế menu sáu mục trước đây. |
 | CONFIRMED | Cloudflare-first với Workers, D1 cho dữ liệu động và R2 cho ảnh. M0 kiểm tra local, các thay đổi và triển khai từ xa cần quyền riêng. |
 | CONFIRMED | Google là phương thức đăng nhập đầu tiên. Creator theo lời mời, tự đăng, tự gắn tier và sửa bài của mình. Admin xử lý vi phạm và có audit. |
-| CONFIRMED | Bình chọn yêu thích trước bình chọn sức mạnh. Có tối đa một phiếu mỗi tài khoản/cuộc, đổi được khi đang mở. Theo dõi Creator sau reaction và bình luận. |
+| DEFERRED | Tạm bỏ Công cụ và Bình chọn khỏi website hiện tại để tập trung năm trang chính. Yêu cầu bình chọn yêu thích trước sức mạnh và quy tắc phiếu được giữ làm tham chiếu nếu phạm vi này được mở lại. |
 | CONFIRMED | Tên hiển thị là Cẩm Nang Cờ Liên Quân. Tên repo và package kỹ thuật là CoLQ-Web. |
 | CONFIRMED | M1 dùng URL ảnh từ manifest R2 hiện có trên local, giữ liên kết toàn ô trang bị và SVG thưởng vàng đã sửa ở CoLQ cũ. |
 | CONFIRMED | M1 thực hiện local và nghiệm thu trước khi push lên `main`. Các tài nguyên Cloudflare cũ chỉ đọc trong phạm vi này. |

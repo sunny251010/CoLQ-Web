@@ -12,11 +12,11 @@
 ## A. Quyết định sản phẩm đã CHỐT
 
 1. CoLQ là website cộng đồng Cờ Liên Quân, xem nội dung không cần tài khoản, không quảng cáo.
-2. Các nav công khai: **Trang chủ / Đội hình / Thư viện / Công cụ / Hướng dẫn & Mẹo / Bình chọn**. Liên hệ/Báo lỗi ở footer hoặc context menu.
+2. Menu chính hiện tại theo thứ tự **Trang chủ / Đội hình / Hướng dẫn & Mẹo / Thư viện / Liên hệ & Góp ý**. Tạm bỏ Công cụ và Bình chọn để tập trung năm trang chính. Mặc định triển khai local, push và deploy khi có yêu cầu riêng.
 3. **Đội hình:** lọc theo mùa mới → cũ; desktop mùa nằm ở sidebar bên phải, mobile chọn mùa phía trên danh sách; creator có bài riêng kể cả đội hình trùng.
 4. Bác chủ động mời và cấp quyền Creator. Creator tự đăng và tự gắn tier Meta (S/A/B…), chỉ sửa/xóa bài của mình; admin có quyền quản trị toàn bộ và xử lý vi phạm. Meta/tier là **đánh giá của creator**, không phải kết luận chính thức của CoLQ.
 5. Trang bài có **reaction, bình luận và trả lời 2 cấp, chia sẻ**; đăng nhập mới tương tác. Creator không được tự ý xóa mọi ý kiến trái chiều của người khác.
-6. **Bình chọn:** yêu thích quân cờ/lõi/trang bị trước; bình chọn sức mạnh theo mùa sau. Mỗi người một phiếu hợp lệ mỗi cuộc bình chọn, cho đổi phiếu khi cuộc bình chọn còn mở. Cần chống thao túng.
+6. **Bình chọn tạm gác.** Các yêu cầu bình chọn dưới đây được giữ để tham chiếu nếu chủ dự án mở lại phạm vi.
 7. **Theo dõi Creator:** sau reaction/bình luận.
 8. **Đăng nhập:** Google trước, thành viên thường có thể được thăng vai trò creator theo lời mời; không cần cấp GitHub/Cloudflare cho creator.
 9. **UI:** Dark gaming hiện đại; ưu tiên mobile, dễ đọc, tải nhẹ, không vay mượn nguyên xi nhận diện TFT/Liên Quân.
@@ -45,14 +45,14 @@
 /thu-vien/trang-bi/            Trang bị
 /thu-vien/loi/                Lõi/Chúc phúc (mapping sau audit)
 /thu-vien/nhiem-vu/           Nhiệm vụ
-/cong-cu/                      Hub công cụ
-/cong-cu/xay-doi-hinh/        Builder (milestone riêng)
+/cong-cu/                      Dự kiến tạm gác
+/cong-cu/xay-doi-hinh/        Builder tạm gác
 /huong-dan/                    Danh sách bài hướng dẫn
 /huong-dan/:slug-id/           Bài creator
-/binh-chon/                    Hub vote
-/binh-chon/yeu-thich/         Favorite poll
-/binh-chon/suc-manh/           Power poll (later)
-/binh-chon/lich-su/            Poll archive
+/binh-chon/                    Dự kiến tạm gác
+/binh-chon/yeu-thich/         Dự kiến tạm gác
+/binh-chon/suc-manh/           Dự kiến tạm gác
+/binh-chon/lich-su/            Dự kiến tạm gác
 /creator/:handle/              Public creator profile
 /dang-nhap/                    Google auth
 /tai-khoan/                    Member profile/settings
@@ -75,7 +75,7 @@ M1 giữ route lịch sử dưới `/quan-co/`, `/phe-nghe/`, `/trang-bi/`, `/ch
 - Breakpoints hướng dẫn: mobile `<640px`, tablet `640–1023px`, desktop `>=1024px`; kiểm tra 360/390/768/1024/1440px.
 - Nút chạm ít nhất ~44×44px, focus visible, keyboard navigation, skip-to-content, reduced motion; không chỉ dựa vào màu để thể hiện tier.
 - Skeleton loading; empty state, error/retry, upload progress, network failure, login-required modal, published/draft status; không đánh tráo demo thành dữ liệu thực.
-- Header desktop sticky vừa phải, nav 6 mục + search + avatar; mobile header logo/search/menu và tab/dropdown tuỳ trang. Footer có liên hệ, báo lỗi, chính sách, tuyên bố độc lập không chính thức.
+- Header desktop sticky vừa phải, nav năm mục theo thứ tự tại mục A.2; mobile header logo/search/menu và tab/dropdown tuỳ trang. Footer có liên hệ, báo lỗi, chính sách, tuyên bố độc lập không chính thức.
 
 ### D2. Trang chủ
 
@@ -83,7 +83,7 @@ M1 giữ route lịch sử dưới `/quan-co/`, `/phe-nghe/`, `/trang-bi/`, `/ch
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ Logo  Trang chủ Đội hình Thư viện Công cụ Hướng dẫn Bình chọn  [Tìm] [Login]│
+│ Logo  Trang chủ  Đội hình  Hướng dẫn & Mẹo  Thư viện  Liên hệ & Góp ý     │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ Tiêu đề: Cờ Liên Quân: đội hình & cộng đồng     [Chọn mùa]                 │
 │ [Tìm quân cờ / trang bị / đội hình............................]           │

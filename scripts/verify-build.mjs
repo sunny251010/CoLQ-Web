@@ -31,7 +31,9 @@ for (const route of previousPaths) assert.ok(existsSync(join(out, fileFor(route)
 for (const file of ['library.json', 'provenance.json']) {
   assert.deepEqual(readFileSync(join(out, 'data', file)), readFileSync(`data/legacy/${file}`));
 }
-assert.equal(pages.size, 226);
+assert.equal(pages.size, 224);
+assert.ok(!existsSync(join(out, 'cong-cu/index.html')));
+assert.ok(!existsSync(join(out, 'binh-chon/index.html')));
 
 let links = 0;
 for (const [file, html] of pages) {
@@ -81,7 +83,7 @@ if (knownOrigin) {
     assert.doesNotMatch(html, /content="noindex, follow"/);
   }
   assert.ok(robots.includes('Sitemap: ' + new URL('/sitemap.xml', knownOrigin).href));
-  for (const route of ['/doi-hinh/', '/binh-chon/', '/cong-cu/', '/lien-he/', '/404.html']) {
+  for (const route of ['/doi-hinh/', '/lien-he/', '/404.html']) {
     assert.match(htmlAt(route), /content="noindex, follow"/);
   }
 } else {

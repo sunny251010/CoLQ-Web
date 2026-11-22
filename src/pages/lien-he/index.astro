@@ -3,12 +3,13 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 ---
 
-<SiteLayout title="Liên hệ và báo lỗi" description="Cách gửi góp ý hoặc báo lỗi dữ liệu thư viện Cờ Liên Quân." indexable={false}>
-  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Liên hệ và báo lỗi' }]} />
+<SiteLayout title="Liên hệ & Góp ý" description="Gửi góp ý cho website hoặc báo lỗi dữ liệu thư viện Cờ Liên Quân." indexable={false}>
+  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Liên hệ & Góp ý' }]} />
   <header class="page-heading">
-    <h1 class="page-title">Liên hệ và báo lỗi</h1>
-    <p class="page-description">Khi báo lỗi dữ liệu, hãy gửi đường dẫn hồ sơ, nội dung cần sửa và nguồn có thể đối chiếu.</p>
+    <h1 class="page-title">Liên hệ &amp; Góp ý</h1>
+    <p class="page-description">Gửi góp ý về nội dung, tính năng hoặc trải nghiệm sử dụng Cẩm Nang Cờ Liên Quân.</p>
   </header>
+  <p>Khi báo lỗi, hãy ghi đường dẫn trang và mô tả điều bạn gặp phải. Với lỗi dữ liệu game, thêm nội dung cần sửa và nguồn có thể đối chiếu.</p>
   <a class="button" href="https://github.com/sunny251010/CoLQ-Web/issues">Mở mục Issues trên GitHub</a>
   <p class="muted">Mục Issues yêu cầu quyền truy cập kho CoLQ-Web.</p>
 </SiteLayout>

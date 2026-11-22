@@ -224,5 +224,5 @@ duong_dan_cu,loai,id_ho_so,duong_dan_de_xuat,hanh_dong_du_kien,bang_chung,ghi_ch
 /data/provenance.json,json,,,CAN_DUYET_TUONG_THICH,Build snapshot 4b1bbe8 + HTTP 200 (22/11/2026),Xác định consumer trước khi quyết định tương thích URL.
 ,landing,,/doi-hinh/,MOI_M0,Build Astro M0,Route cấp một.
 ,landing,,/thu-vien/,MOI_M0,Build Astro M0,Route cấp một.
-,landing,,/cong-cu/,MOI_M0,Build Astro M0,Route cấp một.
-,landing,,/binh-chon/,MOI_M0,Build Astro M0,Route cấp một.
+,landing,,/cong-cu/,TAM_GAC,Quyết định chủ dự án 22/11/2026,Tạm bỏ để tập trung năm trang chính.
+,landing,,/binh-chon/,TAM_GAC,Quyết định chủ dự án 22/11/2026,Tạm bỏ để tập trung năm trang chính.
