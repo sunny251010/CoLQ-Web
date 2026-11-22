@@ -65,6 +65,8 @@
 
 M1 giữ route lịch sử dưới `/quan-co/`, `/phe-nghe/`, `/trang-bi/`, `/chuc-phuc/` và `/nhiem-vu/`. Các đường dẫn `/thu-vien/*` trong sitemap dự kiến mô tả nhóm nội dung. Trang `/thu-vien/` liên kết đến các URL lịch sử thực tế.
 
+Menu Thư viện mặc định mở `/quan-co/`. Trang `/thu-vien/` tiếp tục phục vụ tìm kiếm toàn thư viện. Công thức ghép trang bị được bỏ khỏi nội dung hiển thị và danh sách mục chưa xác minh.
+
 ## D. Wireframes chi tiết — desktop và mobile
 
 ### D1. Design system

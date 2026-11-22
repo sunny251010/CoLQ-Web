@@ -4,6 +4,8 @@ Website cộng đồng Cờ Liên Quân trên CoLQ-Web. Thư viện tĩnh dùng 
 
 Menu chính gồm Trang chủ, Đội hình, Hướng dẫn & Mẹo, Thư viện, Liên hệ & Góp ý theo thứ tự này. Mặc định sửa, kiểm thử và commit local. Push hoặc deploy theo yêu cầu riêng.
 
+Menu Thư viện mặc định mở `/quan-co/`. `/thu-vien/` phục vụ tìm kiếm toàn thư viện. Công thức ghép trang bị được bỏ khỏi giao diện và danh sách trường chưa xác minh.
+
 ## Chạy local
 
 Dùng Node.js 24 hoặc Node.js 22 từ 22.12. Trên PowerShell, dùng `npm.cmd`.

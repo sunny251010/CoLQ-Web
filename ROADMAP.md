@@ -4,6 +4,8 @@ M0 đã có trên GitHub. M1 được chốt trên `m1/library` để review tr�
 
 Ưu tiên hiện tại là năm trang chính theo thứ tự Trang chủ → Đội hình → Hướng dẫn & Mẹo → Thư viện → Liên hệ & Góp ý. Công cụ và Bình chọn được tạm gác. Mặc định sửa, kiểm thử và commit ở local. Push và deploy cần yêu cầu phát hành cụ thể.
 
+Đợt phát hành preview hiện tại đã được duyệt, gồm menu năm mục, tối ưu ảnh, menu Thư viện mở Quân cờ và bỏ công thức ghép trang bị khỏi giao diện.
+
 Menu năm trang đã kiểm thử bằng Chrome local ở 390, 1024 và 1440 px, đúng thứ tự và trạng thái trang hiện tại. Typecheck đạt, build 224 HTML và xác minh đủ 223 URL cũ. Trang Liên hệ & Góp ý dùng GitHub Issues hiện có. Trang Đội hình vẫn chờ nội dung cộng đồng.
 
 | Milestone | Trạng thái | Tiêu chí chính |

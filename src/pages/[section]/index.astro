@@ -38,7 +38,7 @@ const groups = category === 'equipment' ? catalog.equipmentGroups.map(({ id, lab
 ---
 
 <LibraryLayout title={info.title} description={info.summary} section={category}>
-  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện', href: '/thu-vien/' }, { label: info.title }]} />
+  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện', href: '/quan-co/' }, { label: info.title }]} />
   <header class="page-heading">
     <div class="catalog-title"><h1 class="page-title">{info.title}</h1><span class="catalog-total">{records.length} hồ sơ</span></div>
     <p class="page-description">{info.summary}. Mùa của bộ dữ liệu này chưa được xác minh.</p>

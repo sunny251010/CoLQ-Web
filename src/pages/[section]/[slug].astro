@@ -18,6 +18,7 @@ export function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { record } = Astro.props;
 const category = record.category;
+const missingFields = record.missing.filter(({ field }) => category !== 'equipment' || field !== 'recipe');
 const info = categories[category];
 const title = recordTitle(record);
 const summary = recordSummary(record);
@@ -36,7 +37,6 @@ const textDescription = fieldValue<string>(record, 'description');
 const fieldLabels: Record<string, string> = {
   equipment_type: 'Phân loại trang bị',
   stats: 'Chỉ số trang bị',
-  recipe: 'Công thức ghép',
   passive_description: 'Mô tả nội tại',
   damage_text: 'Định lượng sát thương',
   'skill_description.range': 'Phạm vi kỹ năng',
@@ -53,7 +53,7 @@ const skills = [
 const description = summary.length > 155 ? `${summary.slice(0, 152).trimEnd()}…` : summary || `Hồ sơ ${record.name} trong thư viện Cờ Liên Quân.`;
 const breadcrumbs = [
   { label: 'Trang chủ', href: '/' },
-  ...(!guide ? [{ label: 'Thư viện', href: '/thu-vien/' }] : []),
+  ...(!guide ? [{ label: 'Thư viện', href: '/quan-co/' }] : []),
   { label: guide ? 'Hướng dẫn & Mẹo' : info.title, href: info.path },
   { label: title },
 ];
@@ -201,9 +201,9 @@ const breadcrumbs = [
 
       <aside class="profile-source">
         <p>{record.auxiliary ? 'Hồ sơ bổ sung từ bản ghi Bách khoa Cờ Liên Quân.' : 'Dữ liệu quan sát từ Bách khoa Cờ Liên Quân.'} Mùa chưa xác minh.</p>
-        {record.missing.length > 0 && <details>
+        {missingFields.length > 0 && <details>
           <summary>Các mục chưa xác minh trong dữ liệu gốc</summary>
-          <ul>{record.missing.map(({ field }) => <li>{fieldLabels[field] ?? field}</li>)}</ul>
+          <ul>{missingFields.map(({ field }) => <li>{fieldLabels[field] ?? field}</li>)}</ul>
         </details>}
         <a href="/du-lieu/">Xem nguồn và mức xác minh</a>
       </aside>

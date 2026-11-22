@@ -4,6 +4,8 @@ Chủ dự án đã duyệt push M0 lên `main` và đưa `m1/library` lên GitH
 
 Mặc định thực hiện và commit ở local. Chỉ push hoặc deploy khi chủ dự án yêu cầu rõ cho lần phát hành đó.
 
+Lần cập nhật hiện tại được duyệt deploy lên Worker `colq-web-preview`, qua nhánh `preview/cloudflare`, gồm menu năm mục, tối ưu ảnh thư viện và các điều chỉnh điểm vào thư viện, công thức ghép.
+
 | Trạng thái | Quyết định |
 | --- | --- |
 | CONFIRMED | `sunny251010/CoLQ-Web` là đích cho website mới. `sunny251010/CoLQ` được khảo sát chỉ đọc để giữ dữ liệu, asset, URL và bản sửa còn giá trị. Thay thế hướng triển khai trực tiếp trong repo cũ. |
@@ -19,6 +21,7 @@ Mặc định thực hiện và commit ở local. Chỉ push hoặc deploy khi c
 | CONFIRMED | Thư viện lấy bố cục CoLQ cũ làm mẫu, với thanh danh mục dọc trên desktop và hàng tab ngang trên mobile. Giới thiệu nằm trong danh mục thư viện và dùng lại ba bài hướng dẫn gốc. Toàn website dùng Noto Sans có hỗ trợ tiếng Việt, lưu font trong repository. |
 | CONFIRMED | Giữ URL chi tiết, danh mục, JSON và anchor hữu ích của thư viện cũ. `/huong-dan/` phục vụ landing mới có lối vào ba bài cũ. |
 | CONFIRMED | Kết nối GitHub `sunny251010/CoLQ-Web` với một Worker mới trên tài khoản Sunny để xem trước thư viện. Bản preview dùng nhánh `preview/cloudflare` và SEO staging. |
+| CONFIRMED | Menu Thư viện và nút Mở thư viện mặc định đến `/quan-co/`. Giữ `/thu-vien/` cho tìm kiếm toàn bộ thư viện. Bỏ công thức ghép trang bị khỏi giao diện và danh sách trường chưa xác minh. |
 | OPEN | Quyền dùng ảnh công khai của CoLQ-Web, host production, host staging và phạm vi dữ liệu mùa hoặc Builder cần nguồn bổ sung. |
 | OPEN | Cặp phiên bản adapter/Workers, thư viện auth, phương án schema/migrations và editor cần spike. Google OAuth staging cần callback và thông tin xác thực do chủ dự án quản lý. |
 | DEFERRED | Auth, Creator Studio và nội dung động từ M2. Tương tác từ M3, bình chọn ở M4/M6 và Builder theo dữ liệu thực ở M5. |

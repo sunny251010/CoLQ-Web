@@ -9,11 +9,14 @@ const { current = Astro.url.pathname } = Astro.props;
 
 <nav aria-label="Điều hướng chính">
   <ul>
-    {navigation.map(({ href, label }) => (
+    {navigation.map(({ href, label }) => {
+      const active = current === href || (href === '/quan-co/' && current === '/thu-vien/');
+      return (
       <li>
-        <a href={href} aria-current={current === href ? (Astro.url.pathname === href ? 'page' : 'true') : undefined}>{label}</a>
+        <a href={href} aria-current={active ? (Astro.url.pathname === href ? 'page' : 'true') : undefined}>{label}</a>
       </li>
-    ))}
+      );
+    })}
   </ul>
 </nav>
 

@@ -64,6 +64,10 @@ for (const record of records) {
   assert.ok(html.includes(record.name.replaceAll('&', '&amp;')), record.href);
 }
 const equipment = htmlAt('/trang-bi/');
+for (const record of records.filter(({ category }) => category === 'equipment')) {
+  assert.doesNotMatch(htmlAt(record.href), /Công thức ghép|<li>recipe<\/li>/);
+}
+assert.match(htmlAt('/'), /<a[^>]*href="\/quan-co\/"[^>]*>Thư viện<\/a>/);
 assert.equal((equipment.match(/class="equipment-card-link"/g) ?? []).length, 22);
 assert.equal(records.filter(({ category }) => category === 'quests').reduce((count, record) =>
   count + (htmlAt(record.href).match(/<span class="gold-reward"/g) ?? []).length, 0), 15);
