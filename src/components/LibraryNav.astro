@@ -1,19 +1,35 @@
 ---
-import { categories, libraryCategories, type Category } from '../lib/library';
+import { categories, type Category } from '../lib/library';
 interface Props {
-  current?: Category;
+  current?: Category | 'intro';
 }
 const { current } = Astro.props;
+const keys = ['heroes', 'traits', 'equipment', 'quests', 'augments'] as const;
+const tabs = [
+  { key: 'intro', path: '/gioi-thieu/', title: 'Giới thiệu', glyph: 'ⓘ' },
+  ...keys.map((key) => ({ key, ...categories[key] })),
+];
 ---
 
 <nav class="library-nav" aria-label="Danh mục thư viện">
-  <ul>
-    {libraryCategories.map((category) => (
+  <a class="library-nav-home" href="/thu-vien/" aria-current={Astro.url.pathname === '/thu-vien/' ? 'page' : undefined}>Thư viện</a>
+  <ul data-library-tabs>
+    {tabs.map(({ key, path, title, glyph }) => (
       <li>
-        <a href={categories[category].path} aria-current={current === category ? 'page' : undefined}>
-          {categories[category].title}
+        <a href={path} aria-current={Astro.url.pathname === path ? 'page' : current === key || (current === 'basic-info' && key === 'intro') ? 'location' : undefined}>
+          <span class="library-nav-icon" aria-hidden="true">{glyph}</span>{title}
         </a>
       </li>
     ))}
   </ul>
 </nav>
+
+<script>
+  const tabs = document.querySelector<HTMLElement>('[data-library-tabs]');
+  const active = tabs?.querySelector('[aria-current]');
+  if (tabs && active && tabs.scrollWidth > tabs.clientWidth) {
+    const item = active.getBoundingClientRect();
+    const viewport = tabs.getBoundingClientRect();
+    tabs.scrollLeft += item.left - viewport.left - (viewport.width - item.width) / 2;
+  }
+</script>

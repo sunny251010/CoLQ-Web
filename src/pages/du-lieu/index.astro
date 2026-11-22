@@ -1,11 +1,11 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
+import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { catalog, recordTitle } from '../../lib/library';
 const partial = catalog.records.filter((record) => record.status === 'PARTIAL');
 ---
 
-<SiteLayout title="Nguồn và mức xác minh" description="Xem phiên dữ liệu, quyền sử dụng ảnh và các hồ sơ Cờ Liên Quân còn mục chưa xác minh." current="/thu-vien/">
+<LibraryLayout title="Nguồn và mức xác minh" description="Xem phiên dữ liệu, quyền sử dụng ảnh và các hồ sơ Cờ Liên Quân còn mục chưa xác minh.">
   <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện', href: '/thu-vien/' }, { label: 'Nguồn dữ liệu' }]} />
   <header class="page-heading">
     <h1 class="page-title">Nguồn và mức xác minh</h1>
@@ -25,4 +25,4 @@ const partial = catalog.records.filter((record) => record.status === 'PARTIAL');
     <h2>Hồ sơ còn mục chưa xác minh</h2>
     <ul class="profile-link-grid">{partial.map((record) => <li><a href={record.href}>{recordTitle(record)}</a></li>)}</ul>
   </section>
-</SiteLayout>
+</LibraryLayout>

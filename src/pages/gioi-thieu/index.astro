@@ -1,26 +1,35 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
+import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import GuideSections from '../../components/GuideSections.astro';
 import { guideSections, guides } from '../../lib/library';
+
+const chapters = guides.map((guide, index) => ({ guide, anchor: `intro-${index}`, title: guide.name.split(' (')[0] }));
 ---
 
-<SiteLayout title="Giới thiệu Cờ Liên Quân" description="Luật chơi và các phần hướng dẫn gốc đã quan sát trong thư viện Cờ Liên Quân." current="/thu-vien/">
+<LibraryLayout title="Giới thiệu Cờ Liên Quân" description="Luật chơi và hướng dẫn nhập môn Cờ Liên Quân từ Bách khoa." section="intro">
   <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện', href: '/thu-vien/' }, { label: 'Giới thiệu' }]} />
   <header class="page-heading">
-    <h1 class="page-title">Làm quen với Cờ Liên Quân</h1>
-    <p class="page-description">Nội dung hướng dẫn từ thư viện cũ, theo phiên bản Bách khoa đã quan sát.</p>
+    <h1 class="page-title">Làm quen với <em class="intro-game-title">Cờ Liên Quân</em></h1>
+    <p class="page-description">Đọc các hướng dẫn nhập môn từ Bách khoa Cờ Liên Quân.</p>
   </header>
-  <nav class="section-jumps" aria-label="Nội dung giới thiệu">
-    {guides.map((guide, index) => <a href={`#intro-${index}`}>{guide.name}</a>)}
+  <nav class="intro-index" aria-labelledby="intro-index-title">
+    <h2 id="intro-index-title">Mục lục</h2>
+    <ol>
+      {chapters.map(({ title, anchor }) => <li><a href={`#${anchor}`}>{title}</a></li>)}
+    </ol>
   </nav>
-  <div class="guide-content">
-    {guides.map((guide, index) => (
-      <article id={`intro-${index}`} class="content-block">
+  <div class="guide-content intro-chapters">
+    {chapters.map(({ guide, anchor }) => (
+      <article id={anchor} class="content-block">
         <h2>{guide.name}</h2>
         <GuideSections sections={guideSections(guide)} titleLevel="h3" />
         <a href={guide.href}>Mở hồ sơ hướng dẫn</a>
       </article>
     ))}
   </div>
-</SiteLayout>
+  <nav class="page-links" aria-label="Tra cứu tiếp trong thư viện">
+    <a href="/quan-co/">Xem quân cờ</a>
+    <a href="/nhiem-vu/">Xem nhiệm vụ</a>
+  </nav>
+</LibraryLayout>

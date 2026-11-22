@@ -7,9 +7,10 @@ interface Props {
   description: string;
   current?: string;
   indexable?: boolean;
+  library?: boolean;
 }
 
-const { title, description, current, indexable = true } = Astro.props;
+const { title, description, current, indexable = true, library = false } = Astro.props;
 const brand = 'Cẩm Nang Cờ Liên Quân';
 const documentTitle = Astro.url.pathname === '/' ? brand : `${title} | ${brand}`;
 const canonical = Astro.site && indexable ? new URL(Astro.url.pathname, Astro.site) : undefined;
@@ -48,7 +49,7 @@ const canonical = Astro.site && indexable ? new URL(Astro.url.pathname, Astro.si
         </details>
       </div>
     </header>
-    <main class="container" id="noi-dung" tabindex="-1">
+    <main class:list={['container', library && 'library-main']} id="noi-dung" tabindex="-1">
       <span id="main"></span>
       <slot />
     </main>
@@ -145,6 +146,8 @@ const canonical = Astro.site && indexable ? new URL(Astro.url.pathname, Astro.si
   main {
     padding-block: clamp(1.25rem, 4vw, 3.5rem) clamp(3rem, 6vw, 5rem);
   }
+
+  .library-main { max-width: 98rem; padding: 0; }
 
   #main {
     display: block;

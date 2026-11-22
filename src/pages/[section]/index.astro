@@ -1,8 +1,7 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
+import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CatalogSearch from '../../components/CatalogSearch.astro';
-import LibraryNav from '../../components/LibraryNav.astro';
 import RecordCard from '../../components/RecordCard.astro';
 import { augmentTiers, catalog, categories, libraryCategories } from '../../lib/library';
 import type { InferGetStaticPropsType } from 'astro';
@@ -17,6 +16,9 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { category } = Astro.props;
 const info = categories[category];
 const records = catalog.records.filter((record) => record.category === category);
+if (category === 'heroes') {
+  records.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity) || a.name.localeCompare(b.name, 'vi'));
+}
 const filters = {
   heroes: [
     { name: 'price', label: 'Giá vàng', options: [...new Set(records.map(({ price }) => price))].filter((price) => price != null).sort((a, b) => a - b).map((value) => ({ value: String(value), label: `${value} vàng` })) },
@@ -30,40 +32,42 @@ const filters = {
 const groups = category === 'equipment' ? catalog.equipmentGroups.map(({ id, label, anchor }) => ({
   label,
   anchor,
+  tone: undefined,
   rows: records.filter((record) => record.equipmentGroup?.id === id)
     .sort((a, b) => (a.equipmentGroup?.position ?? 0) - (b.equipmentGroup?.position ?? 0)),
-})) : category === 'augments' ? augmentTiers.map(({ id, value, label }) => ({
-  label, anchor: id, rows: records.filter((record) => record.quality === value),
+})) : category === 'augments' ? augmentTiers.map(({ id, value, label, tone }) => ({
+  label, anchor: id, tone, rows: records.filter((record) => record.quality === value),
 })) : [];
 ---
 
-<SiteLayout title={info.title} description={info.summary} current="/thu-vien/">
+<LibraryLayout title={info.title} description={info.summary} section={category}>
   <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện', href: '/thu-vien/' }, { label: info.title }]} />
   <header class="page-heading">
-    <h1 class="page-title">{info.title}</h1>
+    <div class="catalog-title"><h1 class="page-title">{info.title}</h1><span class="catalog-total">{records.length} hồ sơ</span></div>
     <p class="page-description">{info.summary}. Mùa của bộ dữ liệu này chưa được xác minh.</p>
   </header>
-  <LibraryNav current={category} />
-  {groups.length > 0 && (
-    <nav class="section-jumps" aria-label="Đi đến nhóm">
-      {groups.map(({ label, anchor }) => <a href={`#${anchor}`}>{label}</a>)}
-    </nav>
-  )}
   <CatalogSearch label={`Tìm trong ${info.title.toLocaleLowerCase('vi')}`} count={records.length} filters={filters}>
-    {groups.length > 0 ? groups.map(({ anchor, label, rows }) => (
-      <section class="catalog-group" id={anchor} data-filter-group aria-labelledby={`${anchor}-heading`}>
+    <Fragment slot="after-filters">
+      {groups.length > 0 && <nav class="catalog-jumps" aria-label="Đi đến nhóm" data-group-jumps>
+        {groups.map(({ label, anchor, rows, tone }) => (
+          <a href={`#${anchor}`} data-group-jump={anchor} data-tone={tone}>{label}<span data-group-count>{rows.length}</span></a>
+        ))}
+      </nav>}
+    </Fragment>
+    {groups.length > 0 ? groups.map(({ anchor, label, rows, tone }) => (
+      <section class="catalog-group" id={anchor} data-filter-group data-tone={tone} aria-labelledby={`${anchor}-heading`}>
         <header class="section-heading">
           <h2 id={`${anchor}-heading`}>{label}</h2>
           <span class="muted"><span data-group-count>{rows.length}</span> hồ sơ</span>
         </header>
-        <div class:list={['record-grid', category === 'augments' && 'record-grid--augments']}>
+        <div class:list={['record-grid', `record-grid--${category}`]}>
           {rows.map((record) => <RecordCard record={record} />)}
         </div>
       </section>
     )) : (
-      <div class:list={['record-grid', category === 'heroes' && 'record-grid--heroes']}>
+      <div class:list={['record-grid', `record-grid--${category}`]}>
         {records.map((record, index) => <RecordCard record={record} eager={index < 2} />)}
       </div>
     )}
   </CatalogSearch>
-</SiteLayout>
+</LibraryLayout>

@@ -16,6 +16,7 @@ const trait = record.category === 'traits';
 const firstReward = fieldValue<Reward[]>(record, 'rewards')?.[0];
 const tier = augmentTiers.find(({ value }) => record.quality === value);
 const classification = fieldValue<string>(record, 'ui_category_label');
+const thresholds = trait ? fieldValue<{ required_count: number }[]>(record, 'levels') ?? [] : [];
 const group = record.equipmentGroup?.id ?? classification;
 const summary = hero ? fieldValue<string>(record, 'skill_name') : recordSummary(record);
 const search = normalizeSearch([
@@ -34,15 +35,23 @@ const search = normalizeSearch([
   data-quality={record.quality ?? ''}
   data-reward={(fieldValue<Reward[]>(record, 'rewards') ?? []).map(({ reward_type }) => reward_type).join(' ')}
 >
-  {firstReward?.reward_type === 'gold'
-    ? <GoldReward quantity={firstReward.quantity} />
-    : <GameImage record={record} slot={primarySlot(record)} shape={hero ? 'portrait' : 'icon'} eager={eager} />}
-  <div class="record-card-body">
-    <div class="record-card-title">
-      <h3><a class:list={[equipment && 'equipment-card-link']} href={record.href} aria-label={recordTitle(record)}>{record.name}</a></h3>
+  {hero ? (
+    <div class="record-card-portrait">
+      <GameImage record={record} slot={primarySlot(record)} shape="portrait" eager={eager} />
       {record.price != null && <span class="price">{record.price} vàng</span>}
     </div>
+  ) : firstReward?.reward_type === 'gold'
+    ? <GoldReward quantity={firstReward.quantity} />
+    : <GameImage record={record} slot={primarySlot(record)} eager={eager} />}
+  <div class="record-card-body">
+    <div class="record-card-title">
+      <h3><a class:list={[equipment && 'equipment-card-link', hero && 'hero-card-link']} href={record.href} aria-label={recordTitle(record)}>{record.name}</a></h3>
+    </div>
     {classification && <p class="record-meta">{classification} · {record.members.length} quân cờ</p>}
+    {thresholds.length > 0 && <ul class="trait-thresholds" aria-label="Mốc kích hoạt">
+      {thresholds.map(({ required_count }) => <li>{required_count}</li>)}
+    </ul>}
+    {record.equipmentGroup && <p class="record-meta equipment-group">{record.equipmentGroup.label}</p>}
     {tier && <p class:list={['record-meta', `tier-${tier.tone}`]}>{tier.label}</p>}
     {summary && !trait && <p class="record-summary">{summary}</p>}
     {hero && <TraitLinks record={record} />}

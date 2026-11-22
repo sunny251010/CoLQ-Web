@@ -31,9 +31,10 @@ Build mặc định dùng chế độ staging và gắn `noindex, follow`. Khi c
 | Đường dẫn | Vai trò |
 | --- | --- |
 | `src/pages/` | Sáu điểm vào, danh mục, hồ sơ, 404 và endpoint JSON/SEO tĩnh |
-| `src/layouts/SiteLayout.astro` | Metadata, điều hướng desktop/mobile, nội dung chính và footer |
+| `src/layouts/` | Layout chung, metadata và khung điều hướng thư viện |
 | `src/components/SiteNav.astro` · `src/navigation.ts` | Component điều hướng và danh sách nhãn/URL dùng chung |
-| `src/styles/site.css` | Tokens Dark Gaming UI, layout tra cứu, focus và breakpoint |
+| `src/styles/` | Tokens Dark Gaming UI, layout tra cứu, focus và breakpoint |
+| `public/fonts/` | Noto Sans Variable từ Fontsource 5.3.0, dùng lại bộ Latin và tiếng Việt của CoLQ cũ theo giấy phép SIL OFL 1.1 |
 | `src/lib/` · `data/legacy/` | Kiểu dữ liệu và snapshot thư viện, manifest R2 và provenance theo SHA-256 |
 | `scripts/verify-*.mjs` | Kiểm tra hash, ID, quan hệ, ảnh, URL và SEO của bản build |
 | `docs/planning/` | Đặc tả, wireframe và prompt milestone |

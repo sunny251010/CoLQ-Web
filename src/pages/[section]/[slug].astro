@@ -6,7 +6,7 @@ import GameImage from '../../components/GameImage.astro';
 import GoldReward from '../../components/GoldReward.astro';
 import GuideSections from '../../components/GuideSections.astro';
 import TraitLinks from '../../components/TraitLinks.astro';
-import SiteLayout from '../../layouts/SiteLayout.astro';
+import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import { augmentTiers, categories, fieldValue, guideSections, primarySlot, recordById, records, recordSummary, recordTitle, type Reward, type StarLevel } from '../../lib/library';
 
 export function getStaticPaths() {
@@ -59,9 +59,9 @@ const breadcrumbs = [
 ];
 ---
 
-<SiteLayout title={title} description={description} current={guide ? '/huong-dan/' : '/thu-vien/'}>
+<LibraryLayout title={title} description={description} section={category}>
   <Breadcrumbs items={breadcrumbs} />
-  <article class="profile">
+  <article class:list={['profile', hero && 'profile--hero']}>
     <header class="profile-header" data-category={category}>
       {!guide && category !== 'quests' && <GameImage record={record} slot={primarySlot(record)} shape={hero ? 'portrait' : 'icon'} eager />}
       <div>
@@ -209,7 +209,7 @@ const breadcrumbs = [
       </aside>
     </div>
   </article>
-</SiteLayout>
+</LibraryLayout>
 
 <script>
   const starPanel = document.querySelector('[data-star-panel]');

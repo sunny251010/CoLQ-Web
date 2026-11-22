@@ -31,6 +31,7 @@ const { label, count, filters = [], onlyWithQuery = false } = Astro.props;
     <button type="reset" class="button button--quiet">Đặt lại</button>
   </form>
   <noscript><p class="muted">Bạn vẫn có thể duyệt danh mục và mở từng hồ sơ. Bật JavaScript để tìm và lọc trên trang này.</p></noscript>
+  <slot name="after-filters" />
   <div data-search-results hidden={onlyWithQuery}>
     <p class="results-count" data-result-count role="status">{count} hồ sơ</p>
     <slot />
@@ -54,6 +55,9 @@ const { label, count, filters = [], onlyWithQuery = false } = Astro.props;
     const inputs = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
     const items = [...results.querySelectorAll<HTMLElement>('[data-record-id]')];
     const groups = [...results.querySelectorAll<HTMLElement>('[data-filter-group]')];
+    const jumps = catalog.querySelector<HTMLElement>('[data-group-jumps]');
+    const groupJumps = new Map([...catalog.querySelectorAll<HTMLElement>('[data-group-jump]')]
+      .map((jump) => [jump.dataset.groupJump, jump]));
 
     function syncFromUrl() {
       const params = new URLSearchParams(location.search);
@@ -83,7 +87,14 @@ const { label, count, filters = [], onlyWithQuery = false } = Astro.props;
         group.hidden = groupCount === 0;
         const total = group.querySelector('[data-group-count]');
         if (total) total.textContent = String(groupCount);
+        const jump = groupJumps.get(group.id);
+        if (jump) {
+          jump.hidden = group.hidden;
+          const jumpCount = jump.querySelector('[data-group-count]');
+          if (jumpCount) jumpCount.textContent = String(groupCount);
+        }
       }
+      if (jumps) jumps.hidden = visibleCount === 0;
       count.textContent = `${visibleCount} / ${items.length} hồ sơ`;
       empty.hidden = visibleCount !== 0;
       if (writeUrl) {

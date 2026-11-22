@@ -14,6 +14,7 @@ Chủ dự án đã duyệt push M0 lên `main` và đưa `m1/library` lên GitH
 | CONFIRMED | M1 dùng URL ảnh từ manifest R2 hiện có trên local, giữ liên kết toàn ô trang bị và SVG thưởng vàng đã sửa ở CoLQ cũ. |
 | CONFIRMED | M1 thực hiện local và nghiệm thu trước khi push lên `main`. Các tài nguyên Cloudflare cũ chỉ đọc trong phạm vi này. |
 | CONFIRMED | Danh mục Lõi/Chúc phúc có tối đa hai ô mỗi hàng và ảnh lõi ít nhất 100 × 100 px. Tăng nhẹ ảnh Phe/Nghề và Trang bị. |
+| CONFIRMED | Thư viện lấy bố cục CoLQ cũ làm mẫu, với thanh danh mục dọc trên desktop và hàng tab ngang trên mobile. Giới thiệu nằm trong danh mục thư viện và dùng lại ba bài hướng dẫn gốc. Toàn website dùng Noto Sans có hỗ trợ tiếng Việt, lưu font trong repository. |
 | CONFIRMED | Giữ URL chi tiết, danh mục, JSON và anchor hữu ích của thư viện cũ. `/huong-dan/` phục vụ landing mới có lối vào ba bài cũ. |
 | OPEN | Quyền dùng ảnh công khai của CoLQ-Web, host production, host staging và phạm vi dữ liệu mùa hoặc Builder cần nguồn bổ sung. |
 | OPEN | Cặp phiên bản adapter/Workers, thư viện auth, phương án schema/migrations và editor cần spike. Google OAuth staging cần callback và thông tin xác thực do chủ dự án quản lý. |

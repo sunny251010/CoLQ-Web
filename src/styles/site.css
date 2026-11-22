@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/noto-sans-vietnamese-wght-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/noto-sans-latin-wght-normal.woff2') format('woff2');
+}
+
 :root {
   color-scheme: dark;
   --color-bg: #0b1020;
@@ -9,7 +25,7 @@
   --color-accent: #d5ad66;
   --color-positive: #55bca5;
   --color-danger: #db8291;
-  --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -109,7 +125,6 @@ code { overflow-wrap: anywhere; }
 .page-heading .page-title { max-width: none; letter-spacing: -0.035em; }
 
 .breadcrumbs ol,
-.library-nav ul,
 .directory-grid,
 .featured-grid,
 .trait-links,
@@ -310,16 +325,12 @@ input[type='search']::placeholder { color: var(--color-muted); }
 .directory-count { color: var(--color-accent); font-size: 0.85rem; }
 .directory-summary { color: var(--color-muted); font-size: 0.875rem; line-height: 1.4; }
 
-.library-nav {
-  border-block: 1px solid var(--color-line);
-  margin-block: var(--space-4);
-}
-.library-nav ul, .section-jumps, .trait-links {
+.trait-links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
 }
-.library-nav a, .section-jumps a, .trait-links a {
+.trait-links a {
   display: inline-flex;
   align-items: center;
   min-height: var(--target-min);
@@ -327,12 +338,7 @@ input[type='search']::placeholder { color: var(--color-muted); }
   color: var(--color-muted);
   text-underline-offset: 0.2em;
 }
-.library-nav a[aria-current], .library-nav a:hover, .section-jumps a:hover, .trait-links a:hover {
-  color: var(--color-accent);
-}
-.library-nav a[aria-current] { font-weight: 750; }
-.section-jumps { margin-block: var(--space-4); }
-.section-jumps a { border: 1px solid var(--color-line); border-radius: var(--radius); }
+.trait-links a:hover { color: var(--color-accent); }
 
 .catalog-filters {
   display: flex;
@@ -380,11 +386,6 @@ input[type='search']::placeholder { color: var(--color-muted); }
   grid-template-columns: minmax(0, 1fr);
   gap: 0;
   padding: 0;
-}
-
-.record-card--hero > .game-image {
-  aspect-ratio: 1.35;
-  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .record-card--hero .record-card-body { padding: var(--space-3); }
@@ -567,5 +568,4 @@ input[type='search']::placeholder { color: var(--color-muted); }
 
 @media (min-width: 64rem) {
   .directory-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-3); }
-  .record-grid--heroes { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
