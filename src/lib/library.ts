@@ -96,6 +96,23 @@ export const imagesById = new Map(assetManifest.records.map((record) => [
 ]));
 export const guides = catalog.records.filter((record) => record.category === 'basic-info');
 
+export function categoryRecords(category: Category): LibraryRecord[] {
+  const rows = catalog.records.filter((record) => record.category === category);
+  if (category === 'heroes') {
+    return rows.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity) || a.name.localeCompare(b.name, 'vi'));
+  }
+  if (category === 'equipment') {
+    const order = new Map(catalog.equipmentGroups.map(({ id, ordinal }) => [id, ordinal]));
+    return rows.sort((a, b) => (order.get(a.equipmentGroup?.id ?? '') ?? Infinity) - (order.get(b.equipmentGroup?.id ?? '') ?? Infinity)
+      || (a.equipmentGroup?.position ?? 0) - (b.equipmentGroup?.position ?? 0));
+  }
+  if (category === 'augments') {
+    return rows.sort((a, b) => augmentTiers.findIndex(({ value }) => value === a.quality)
+      - augmentTiers.findIndex(({ value }) => value === b.quality));
+  }
+  return rows;
+}
+
 export function fieldValue<T>(record: LibraryRecord, field: string): T | undefined {
   return (record.fields[field]?.value ?? undefined) as T | undefined;
 }

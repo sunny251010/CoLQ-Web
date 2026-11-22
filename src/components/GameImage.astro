@@ -21,6 +21,7 @@ const initials = record.name.split(/\s+/).slice(0, 2).map((word) => word[0]).joi
     width={image.width}
     height={image.height}
     loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
     decoding="async"
     alt={alt}
     data-game-image

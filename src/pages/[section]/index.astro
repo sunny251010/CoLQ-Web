@@ -3,7 +3,7 @@ import LibraryLayout from '../../layouts/LibraryLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CatalogSearch from '../../components/CatalogSearch.astro';
 import RecordCard from '../../components/RecordCard.astro';
-import { augmentTiers, catalog, categories, libraryCategories } from '../../lib/library';
+import { augmentTiers, catalog, categories, categoryRecords, libraryCategories } from '../../lib/library';
 import type { InferGetStaticPropsType } from 'astro';
 
 export function getStaticPaths() {
@@ -15,10 +15,7 @@ export function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { category } = Astro.props;
 const info = categories[category];
-const records = catalog.records.filter((record) => record.category === category);
-if (category === 'heroes') {
-  records.sort((a, b) => (a.price ?? Infinity) - (b.price ?? Infinity) || a.name.localeCompare(b.name, 'vi'));
-}
+const records = categoryRecords(category);
 const filters = {
   heroes: [
     { name: 'price', label: 'Giá vàng', options: [...new Set(records.map(({ price }) => price))].filter((price) => price != null).sort((a, b) => a - b).map((value) => ({ value: String(value), label: `${value} vàng` })) },
@@ -54,19 +51,19 @@ const groups = category === 'equipment' ? catalog.equipmentGroups.map(({ id, lab
         ))}
       </nav>}
     </Fragment>
-    {groups.length > 0 ? groups.map(({ anchor, label, rows, tone }) => (
+    {groups.length > 0 ? groups.map(({ anchor, label, rows, tone }, groupIndex) => (
       <section class="catalog-group" id={anchor} data-filter-group data-tone={tone} aria-labelledby={`${anchor}-heading`}>
         <header class="section-heading">
           <h2 id={`${anchor}-heading`}>{label}</h2>
           <span class="muted"><span data-group-count>{rows.length}</span> hồ sơ</span>
         </header>
         <div class:list={['record-grid', `record-grid--${category}`]}>
-          {rows.map((record) => <RecordCard record={record} />)}
+          {rows.map((record, index) => <RecordCard record={record} eager={groupIndex === 0 && index < 4} />)}
         </div>
       </section>
     )) : (
       <div class:list={['record-grid', `record-grid--${category}`]}>
-        {records.map((record, index) => <RecordCard record={record} eager={index < 2} />)}
+        {records.map((record, index) => <RecordCard record={record} eager={index < 4} />)}
       </div>
     )}
   </CatalogSearch>

@@ -1,22 +1,26 @@
 ---
-import { categories, type Category } from '../lib/library';
+import { catalog, categories, categoryRecords, imagesById, primarySlot, type Category } from '../lib/library';
 interface Props {
   current?: Category | 'intro';
 }
 const { current } = Astro.props;
 const keys = ['heroes', 'traits', 'equipment', 'quests', 'augments'] as const;
 const tabs = [
-  { key: 'intro', path: '/gioi-thieu/', title: 'Giới thiệu', glyph: 'ⓘ' },
-  ...keys.map((key) => ({ key, ...categories[key] })),
+  { key: 'intro', path: '/gioi-thieu/', title: 'Giới thiệu', glyph: 'ⓘ', previewImages: undefined },
+  ...keys.map((key) => ({ key, ...categories[key], previewImages: categoryRecords(key).slice(0, 4)
+    .flatMap((record) => {
+      const image = imagesById.get(record.id)?.[primarySlot(record)];
+      return image ? [`${catalog.publicAssetOrigin}/${image.key}`] : [];
+    }).join(' ') })),
 ];
 ---
 
 <nav class="library-nav" aria-label="Danh mục thư viện">
   <a class="library-nav-home" href="/thu-vien/" aria-current={Astro.url.pathname === '/thu-vien/' ? 'page' : undefined}>Thư viện</a>
   <ul data-library-tabs>
-    {tabs.map(({ key, path, title, glyph }) => (
+    {tabs.map(({ key, path, title, glyph, previewImages }) => (
       <li>
-        <a href={path} aria-current={Astro.url.pathname === path ? 'page' : current === key || (current === 'basic-info' && key === 'intro') ? 'location' : undefined}>
+        <a href={path} data-preview-images={previewImages} aria-current={Astro.url.pathname === path ? 'page' : current === key || (current === 'basic-info' && key === 'intro') ? 'location' : undefined}>
           <span class="library-nav-icon" aria-hidden="true">{glyph}</span>{title}
         </a>
       </li>
@@ -25,6 +29,25 @@ const tabs = [
 </nav>
 
 <script>
+  const warmedImages = new Set<string>();
+  function warmLibraryImages(event: Event) {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    if (connection?.saveData || /2g/.test(connection?.effectiveType ?? '')) return;
+    if (!(event.target instanceof Element)) return;
+    const link = event.target.closest<HTMLAnchorElement>('a[data-preview-images]');
+    if (!link || link.hasAttribute('aria-current')) return;
+    for (const source of link.dataset.previewImages?.split(' ').filter(Boolean) ?? []) {
+      if (warmedImages.has(source)) continue;
+      warmedImages.add(source);
+      const image = new Image();
+      image.fetchPriority = 'low';
+      image.src = source;
+    }
+  }
+  document.addEventListener('pointerover', warmLibraryImages, { passive: true });
+  document.addEventListener('focusin', warmLibraryImages);
+  document.addEventListener('touchstart', warmLibraryImages, { passive: true });
+
   document.addEventListener('astro:page-load', () => {
     const tabs = document.querySelector<HTMLElement>('[data-library-tabs]');
     const active = tabs?.querySelector('[aria-current]');

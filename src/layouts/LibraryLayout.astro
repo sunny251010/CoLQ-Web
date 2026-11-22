@@ -3,6 +3,7 @@ import LibraryNav from '../components/LibraryNav.astro';
 import SiteLayout from './SiteLayout.astro';
 import '../styles/library.css';
 import type { Category } from '../lib/library';
+import { catalog } from '../lib/library';
 
 interface Props {
   title: string;
@@ -14,6 +15,7 @@ const { title, description, section } = Astro.props;
 ---
 
 <SiteLayout {title} {description} current={section === 'basic-info' ? '/huong-dan/' : '/thu-vien/'} library>
+  <link slot="head" rel="preconnect" href={catalog.publicAssetOrigin} />
   <div class="library-frame">
     <LibraryNav current={section} />
     <div class="library-content"><slot /></div>

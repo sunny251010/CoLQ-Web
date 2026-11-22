@@ -24,6 +24,7 @@ const accountPage = /^\/(?:admin|tai-khoan|dang-nhap|creator)(?:\/|$)/.test(Astr
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <slot name="head" />
     {!accountPage && <ClientRouter />}
     <link rel="preload" href="/fonts/noto-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/noto-sans-vietnamese-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
