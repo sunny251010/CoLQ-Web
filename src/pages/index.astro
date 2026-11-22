@@ -1,0 +1,14 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const description = 'Trang cộng đồng dành cho người chơi Cờ Liên Quân.';
+---
+
+<SiteLayout title="Trang chủ" description={description}>
+  <h1 class="page-title">Cờ Liên Quân</h1>
+  <p class="page-description">{description}</p>
+  <div class="page-links">
+    <a href="/doi-hinh/">Khám phá đội hình</a>
+    <a href="/thu-vien/">Mở thư viện</a>
+  </div>
+</SiteLayout>
