@@ -16,3 +16,4 @@ M0 đã có trên GitHub. M1 được chốt trên `m1/library` để review tr�
 - M0 qua kiểm tra kiểu, build 7 HTML và điều hướng Chrome ở 5 chiều rộng. Bản tham chiếu CoLQ qua 16/16 test với đầu vào Phase 6. [Báo cáo và bằng chứng](docs/architecture/m0-audit.md)
 - Đối chiếu hồ sơ, ảnh, URL và các điều kiện đầu vào tại [checklist M1](docs/architecture/m1-checklist.md).
 - M1 qua kiểm tra kiểu, build 226 HTML, kiểm tra 223 URL cũ, Chrome ở 5 độ rộng và mô phỏng Workers tĩnh. Bằng chứng và quyền ảnh còn mở tại [nghiệm thu M1](docs/architecture/m1-checklist.md#kết-quả-đã-chạy).
+- Bản xem trước dùng một Worker riêng, build từ nhánh GitHub `preview/cloudflare`. Đã kiểm tra kiểu, build 226 trang HTML, xác minh 223 URL cũ và chạy Wrangler dry run trên cấu hình preview.
