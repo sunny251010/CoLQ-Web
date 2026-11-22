@@ -1,5 +1,6 @@
 ---
 import SiteNav from '../components/SiteNav.astro';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/site.css';
 
 interface Props {
@@ -14,14 +15,18 @@ const { title, description, current, indexable = true, library = false } = Astro
 const brand = 'Cẩm Nang Cờ Liên Quân';
 const documentTitle = Astro.url.pathname === '/' ? brand : `${title} | ${brand}`;
 const canonical = Astro.site && indexable ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const accountPage = /^\/(?:admin|tai-khoan|dang-nhap|creator)(?:\/|$)/.test(Astro.url.pathname);
 ---
 
 <!doctype html>
-<html lang="vi">
+<html lang="vi" transition:animate="none">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {!accountPage && <ClientRouter />}
+    <link rel="preload" href="/fonts/noto-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/noto-sans-vietnamese-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
     {!canonical && <meta name="robots" content="noindex, follow" />}
     {canonical && <>
       <link rel="canonical" href={canonical} />
@@ -198,9 +203,11 @@ const canonical = Astro.site && indexable ? new URL(Astro.url.pathname, Astro.si
   }
 
   document.addEventListener('error', (event) => hideBrokenImage(event.target), true);
-  for (const image of document.querySelectorAll<HTMLImageElement>('img[data-game-image]')) {
-    if (image.complete && !image.naturalWidth) hideBrokenImage(image);
-  }
+  document.addEventListener('astro:page-load', () => {
+    for (const image of document.querySelectorAll<HTMLImageElement>('img[data-game-image]')) {
+      if (image.complete && !image.naturalWidth) hideBrokenImage(image);
+    }
+  });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey || event.defaultPrevented) return;

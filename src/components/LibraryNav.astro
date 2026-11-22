@@ -25,11 +25,13 @@ const tabs = [
 </nav>
 
 <script>
-  const tabs = document.querySelector<HTMLElement>('[data-library-tabs]');
-  const active = tabs?.querySelector('[aria-current]');
-  if (tabs && active && tabs.scrollWidth > tabs.clientWidth) {
-    const item = active.getBoundingClientRect();
-    const viewport = tabs.getBoundingClientRect();
-    tabs.scrollLeft += item.left - viewport.left - (viewport.width - item.width) / 2;
-  }
+  document.addEventListener('astro:page-load', () => {
+    const tabs = document.querySelector<HTMLElement>('[data-library-tabs]');
+    const active = tabs?.querySelector('[aria-current]');
+    if (tabs && active && tabs.scrollWidth > tabs.clientWidth) {
+      const item = active.getBoundingClientRect();
+      const viewport = tabs.getBoundingClientRect();
+      tabs.scrollLeft += item.left - viewport.left - (viewport.width - item.width) / 2;
+    }
+  });
 </script>

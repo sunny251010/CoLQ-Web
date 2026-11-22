@@ -14,7 +14,7 @@ const { label, count, filters = [], onlyWithQuery = false } = Astro.props;
 ---
 
 <div data-catalog data-only-with-query={onlyWithQuery ? 'true' : 'false'}>
-  <form class="catalog-filters" data-filters role="search" hidden>
+  <form class="catalog-filters" data-filters role="search">
     <div class="filter-field search-field">
       <label for="catalog-q">{label}</label>
       <input id="catalog-q" type="search" name="q" placeholder="Nhập tên hoặc từ khóa…" autocomplete="off" />
@@ -30,7 +30,7 @@ const { label, count, filters = [], onlyWithQuery = false } = Astro.props;
     ))}
     <button type="reset" class="button button--quiet">Đặt lại</button>
   </form>
-  <noscript><p class="muted">Bạn vẫn có thể duyệt danh mục và mở từng hồ sơ. Bật JavaScript để tìm và lọc trên trang này.</p></noscript>
+  <noscript><style is:inline>.catalog-filters { display: none; }</style><p class="muted">Bạn vẫn có thể duyệt danh mục và mở từng hồ sơ. Bật JavaScript để tìm và lọc trên trang này.</p></noscript>
   <slot name="after-filters" />
   <div data-search-results hidden={onlyWithQuery}>
     <p class="results-count" data-result-count role="status">{count} hồ sơ</p>
@@ -45,85 +45,91 @@ const { label, count, filters = [], onlyWithQuery = false } = Astro.props;
 <script>
   import { normalizeSearch } from '../lib/search';
 
-  for (const catalog of document.querySelectorAll<HTMLElement>('[data-catalog]')) {
-    const form = catalog.querySelector<HTMLFormElement>('[data-filters]');
-    const results = catalog.querySelector<HTMLElement>('[data-search-results]');
-    const count = catalog.querySelector<HTMLElement>('[data-result-count]');
-    const empty = catalog.querySelector<HTMLElement>('[data-empty]');
-    if (!form || !results || !count || !empty) continue;
+  let navigationListeners: AbortController | undefined;
+  document.addEventListener('astro:page-load', () => {
+    navigationListeners?.abort();
+    navigationListeners = new AbortController();
+    const { signal } = navigationListeners;
+    for (const catalog of document.querySelectorAll<HTMLElement>('[data-catalog]')) {
+      const form = catalog.querySelector<HTMLFormElement>('[data-filters]');
+      const results = catalog.querySelector<HTMLElement>('[data-search-results]');
+      const count = catalog.querySelector<HTMLElement>('[data-result-count]');
+      const empty = catalog.querySelector<HTMLElement>('[data-empty]');
+      if (!form || !results || !count || !empty) continue;
 
-    const inputs = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
-    const items = [...results.querySelectorAll<HTMLElement>('[data-record-id]')];
-    const groups = [...results.querySelectorAll<HTMLElement>('[data-filter-group]')];
-    const jumps = catalog.querySelector<HTMLElement>('[data-group-jumps]');
-    const groupJumps = new Map([...catalog.querySelectorAll<HTMLElement>('[data-group-jump]')]
-      .map((jump) => [jump.dataset.groupJump, jump]));
+      const inputs = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
+      const items = [...results.querySelectorAll<HTMLElement>('[data-record-id]')];
+      const groups = [...results.querySelectorAll<HTMLElement>('[data-filter-group]')];
+      const jumps = catalog.querySelector<HTMLElement>('[data-group-jumps]');
+      const groupJumps = new Map([...catalog.querySelectorAll<HTMLElement>('[data-group-jump]')]
+        .map((jump) => [jump.dataset.groupJump, jump]));
 
-    function syncFromUrl() {
-      const params = new URLSearchParams(location.search);
-      for (const input of inputs) input.value = params.get(input.name) ?? '';
-    }
-
-    function update(writeUrl = true) {
-      if (!form || !results || !count || !empty) return;
-      const values = new URLSearchParams();
-      for (const { name, value } of inputs) if (value.trim()) values.set(name, value.trim());
-      const query = normalizeSearch(values.get('q') ?? '');
-      results.hidden = catalog.dataset.onlyWithQuery === 'true' && !values.has('q');
-      let visibleCount = 0;
-      for (const item of items) {
-        item.hidden = !item.dataset.search?.includes(query) || inputs.some(({ name }) => {
-          const value = values.get(name);
-          if (name === 'q' || !value) return false;
-          const comparison = item.dataset[name];
-          return name === 'trait' || name === 'reward'
-            ? !comparison?.split(' ').includes(value)
-            : comparison !== value;
-        });
-        if (!item.hidden) visibleCount++;
+      function syncFromUrl() {
+        const params = new URLSearchParams(location.search);
+        for (const input of inputs) input.value = params.get(input.name) ?? '';
       }
-      for (const group of groups) {
-        const groupCount = group.querySelectorAll('[data-record-id]:not([hidden])').length;
-        group.hidden = groupCount === 0;
-        const total = group.querySelector('[data-group-count]');
-        if (total) total.textContent = String(groupCount);
-        const jump = groupJumps.get(group.id);
-        if (jump) {
-          jump.hidden = group.hidden;
-          const jumpCount = jump.querySelector('[data-group-count]');
-          if (jumpCount) jumpCount.textContent = String(groupCount);
+
+      function update(writeUrl = true) {
+        if (!form || !results || !count || !empty) return;
+        const values = new URLSearchParams();
+        for (const { name, value } of inputs) if (value.trim()) values.set(name, value.trim());
+        const query = normalizeSearch(values.get('q') ?? '');
+        results.hidden = catalog.dataset.onlyWithQuery === 'true' && !values.has('q');
+        let visibleCount = 0;
+        for (const item of items) {
+          item.hidden = !item.dataset.search?.includes(query) || inputs.some(({ name }) => {
+            const value = values.get(name);
+            if (name === 'q' || !value) return false;
+            const comparison = item.dataset[name];
+            return name === 'trait' || name === 'reward'
+              ? !comparison?.split(' ').includes(value)
+              : comparison !== value;
+          });
+          if (!item.hidden) visibleCount++;
+        }
+        for (const group of groups) {
+          const groupCount = group.querySelectorAll('[data-record-id]:not([hidden])').length;
+          group.hidden = groupCount === 0;
+          const total = group.querySelector('[data-group-count]');
+          if (total) total.textContent = String(groupCount);
+          const jump = groupJumps.get(group.id);
+          if (jump) {
+            jump.hidden = group.hidden;
+            const jumpCount = jump.querySelector('[data-group-count]');
+            if (jumpCount) jumpCount.textContent = String(groupCount);
+          }
+        }
+        if (jumps) jumps.hidden = visibleCount === 0;
+        count.textContent = `${visibleCount} / ${items.length} hồ sơ`;
+        empty.hidden = visibleCount !== 0;
+        if (writeUrl) {
+          const url = new URL(location.href);
+          for (const input of inputs) {
+            const value = values.get(input.name);
+            if (value) url.searchParams.set(input.name, value);
+            else url.searchParams.delete(input.name);
+          }
+          if (url.href !== location.href) history.replaceState(history.state, '', url);
         }
       }
-      if (jumps) jumps.hidden = visibleCount === 0;
-      count.textContent = `${visibleCount} / ${items.length} hồ sơ`;
-      empty.hidden = visibleCount !== 0;
-      if (writeUrl) {
-        const url = new URL(location.href);
-        for (const input of inputs) {
-          const value = values.get(input.name);
-          if (value) url.searchParams.set(input.name, value);
-          else url.searchParams.delete(input.name);
-        }
-        if (url.href !== location.href) history.replaceState(null, '', url);
-      }
-    }
 
-    syncFromUrl();
-    update(false);
-    form.hidden = false;
-    form.addEventListener('input', () => update());
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      update();
-    });
-    form.addEventListener('reset', (event) => {
-      event.preventDefault();
-      for (const input of inputs) input.value = '';
-      update();
-    });
-    window.addEventListener('popstate', () => {
       syncFromUrl();
       update(false);
-    });
-  }
+      form.dataset.ready = '';
+      form.addEventListener('input', () => update());
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        update();
+      });
+      form.addEventListener('reset', (event) => {
+        event.preventDefault();
+        for (const input of inputs) input.value = '';
+        update();
+      });
+      window.addEventListener('popstate', () => {
+        syncFromUrl();
+        update(false);
+      }, { signal });
+    }
+  });
 </script>

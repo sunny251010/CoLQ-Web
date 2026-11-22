@@ -212,16 +212,18 @@ const breadcrumbs = [
 </LibraryLayout>
 
 <script>
-  const starPanel = document.querySelector('[data-star-panel]');
-  const starPicker = starPanel?.querySelector<HTMLElement>('[data-star-picker]');
-  if (starPicker) {
-    starPicker.hidden = false;
-    starPicker.addEventListener('change', (event) => {
-      if (!(event.target instanceof HTMLInputElement)) return;
-      const level = event.target.value;
-      for (const cell of starPanel?.querySelectorAll<HTMLElement>('[data-star]') ?? []) {
-        cell.classList.toggle('selected-star', cell.dataset.star === level);
-      }
-    });
-  }
+  document.addEventListener('astro:page-load', () => {
+    const starPanel = document.querySelector('[data-star-panel]');
+    const starPicker = starPanel?.querySelector<HTMLElement>('[data-star-picker]');
+    if (starPicker) {
+      starPicker.hidden = false;
+      starPicker.addEventListener('change', (event) => {
+        if (!(event.target instanceof HTMLInputElement)) return;
+        const level = event.target.value;
+        for (const cell of starPanel?.querySelectorAll<HTMLElement>('[data-star]') ?? []) {
+          cell.classList.toggle('selected-star', cell.dataset.star === level);
+        }
+      });
+    }
+  });
 </script>

@@ -49,6 +49,8 @@ Mốc sau M1 theo [ROADMAP](../../ROADMAP.md). Hoàn thành M1 cần kết quả
 
 ## Phạm vi file
 
+Điều hướng được kiểm tra lại bằng Chrome trên local sau khi thêm ClientRouter cho các trang công khai. Với JavaScript được cố ý trì hoãn 400 ms để tái hiện lỗi, tổng dịch chuyển ghi nhận trên trang Phe/Nghề giảm từ khoảng 0,049 trên bản preview cũ xuống khoảng 0,00045 trên local. Bộ lọc giữ sẵn khoảng trống khi khởi tạo, thanh cuộn ổn định và font được preload. Chuyển Phe/Nghề → Trang bị giữ cùng document. Đã thử bộ lọc sau khi quay lại danh mục, chọn cấp sao, Back, anchor Giới thiệu, sáu nav chính, mobile 390 px và tắt JavaScript. Các phép thử này phục vụ kiểm tra hồi quy local, chưa thay thế số liệu Core Web Vitals thực tế của người dùng.
+
 | Nhóm | Đường dẫn |
 | --- | --- |
 | Cấu hình và kiểm chứng | `.gitattributes`, `astro.config.mjs`, `package.json`, `scripts/verify-library.mjs`, `scripts/verify-build.mjs` |
