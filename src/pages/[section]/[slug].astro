@@ -1,0 +1,227 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import FieldNote from '../../components/FieldNote.astro';
+import GameImage from '../../components/GameImage.astro';
+import GoldReward from '../../components/GoldReward.astro';
+import GuideSections from '../../components/GuideSections.astro';
+import TraitLinks from '../../components/TraitLinks.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { augmentTiers, categories, fieldValue, guideSections, primarySlot, recordById, records, recordSummary, recordTitle, type Reward, type StarLevel } from '../../lib/library';
+
+export function getStaticPaths() {
+  return records.map((record) => {
+    const [, section, slug] = record.href.split('/');
+    return { params: { section, slug }, props: { record } };
+  });
+}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { record } = Astro.props;
+const category = record.category;
+const info = categories[category];
+const title = recordTitle(record);
+const summary = recordSummary(record);
+const guide = category === 'basic-info';
+const hero = category === 'heroes';
+const tier = augmentTiers.find(({ value }) => value === record.quality);
+const levelData = fieldValue<StarLevel[]>(record, 'star_levels') ?? [];
+const attributeNames = [...new Set(levelData.flatMap(({ attrs }) => attrs.map(({ name }) => name)))];
+const traitLevels = fieldValue<{ required_count: number; effect: string }[]>(record, 'levels') ?? [];
+const rewards = fieldValue<Reward[]>(record, 'rewards') ?? [];
+const stats = fieldValue<{ label: string; valueText: string }[]>(record, 'stats') ?? [];
+const skill = fieldValue<string>(record, 'skill_name');
+const classification = fieldValue<string>(record, 'ui_category_label');
+const passive = fieldValue<string>(record, 'passive_description');
+const textDescription = fieldValue<string>(record, 'description');
+const fieldLabels: Record<string, string> = {
+  equipment_type: 'Phân loại trang bị',
+  stats: 'Chỉ số trang bị',
+  recipe: 'Công thức ghép',
+  passive_description: 'Mô tả nội tại',
+  damage_text: 'Định lượng sát thương',
+  'skill_description.range': 'Phạm vi kỹ năng',
+  skill_description: 'Mô tả kỹ năng',
+  traits: 'Phe/Nghề',
+  'rewards[0].quantity': 'Số lượng phần thưởng thứ nhất',
+  'rewards[1].quantity': 'Số lượng phần thưởng thứ hai',
+  condition_target: 'Mục tiêu của điều kiện',
+};
+const skills = [
+  { key: 'skill_description', label: 'Hiệu ứng' },
+  { key: 'damage_text', label: 'Sát thương hiển thị' },
+].map(({ key, label }) => ({ key, label, value: fieldValue<string>(record, key) }));
+const description = summary.length > 155 ? `${summary.slice(0, 152).trimEnd()}…` : summary || `Hồ sơ ${record.name} trong thư viện Cờ Liên Quân.`;
+const breadcrumbs = [
+  { label: 'Trang chủ', href: '/' },
+  ...(!guide ? [{ label: 'Thư viện', href: '/thu-vien/' }] : []),
+  { label: guide ? 'Hướng dẫn & Mẹo' : info.title, href: info.path },
+  { label: title },
+];
+---
+
+<SiteLayout title={title} description={description} current={guide ? '/huong-dan/' : '/thu-vien/'}>
+  <Breadcrumbs items={breadcrumbs} />
+  <article class="profile">
+    <header class="profile-header">
+      {!guide && category !== 'quests' && <GameImage record={record} slot={primarySlot(record)} shape={hero ? 'portrait' : 'icon'} eager />}
+      <div>
+        <p class="profile-category">
+          {info.title}
+          {record.equipmentGroup && <> · <a href={`/trang-bi/#${record.equipmentGroup.anchor}`}>{record.equipmentGroup.label}</a></>}
+          {tier && <> · <a href={`/chuc-phuc/#${tier.id}`}>{tier.label}</a></>}
+        </p>
+        <h1 class="page-title">{record.name}</h1>
+        {record.price != null && <p class="price">{record.price} vàng</p>}
+        {record.auxiliary && <p class="page-description">Hồ sơ bổ sung từ phần thưởng nhiệm vụ.</p>}
+        {record.status === 'PARTIAL' && <p class="profile-status">Hồ sơ còn mục chưa xác minh</p>}
+        {hero && <TraitLinks record={record} />}
+      </div>
+    </header>
+
+    <div class="profile-content">
+      {hero && <>
+        <section class="content-block">
+          <h2>Kỹ năng</h2>
+          <div class="skill-heading">
+            <GameImage record={record} slot="skill_icon" />
+            <h3>{skill ?? 'Tên kỹ năng chưa xác minh'}</h3>
+          </div>
+          <dl class="profile-fields">
+            {skills.map(({ key, label, value }) => (
+              <div>
+                <dt>{label}</dt>
+                <dd>{value}<FieldNote field={record.fields[key]} /></dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+        <section class="content-block">
+          <h2 id="chi-so">Chỉ số theo cấp sao</h2>
+          {levelData.length ? <div data-star-panel>
+            <fieldset class="star-picker" data-star-picker hidden>
+              <legend>Làm nổi bật cấp sao</legend>
+              <label><input type="radio" name="cap-sao" value="" checked /> Tất cả</label>
+              {levelData.map(({ stars }) => <label><input type="radio" name="cap-sao" value={stars} /> {stars} sao</label>)}
+            </fieldset>
+            <div class="table-scroll">
+              <table class="stats-table" aria-labelledby="chi-so">
+                <thead><tr><th scope="col">Chỉ số</th>{levelData.map(({ stars }) => <th scope="col" data-star={stars}>{stars} sao</th>)}</tr></thead>
+                <tbody>
+                  {attributeNames.map((name) => <tr>
+                    <th scope="row"><span class="stat-name"><GameImage record={record} slot={`stat:${name}`} shape="badge" optional />{name}</span></th>
+                    {levelData.map(({ stars, attrs }) => (
+                      <td data-star={stars}>{attrs.find((attribute) => attribute.name === name)?.value_text ?? 'Chưa xác minh'}</td>
+                    ))}
+                  </tr>)}
+                </tbody>
+              </table>
+            </div>
+          </div> : <FieldNote field={record.fields.star_levels} />}
+        </section>
+      </>}
+
+      {category === 'traits' && <>
+        <section class="content-block">
+          <h2>Hiệu ứng và mốc kích hoạt</h2>
+          <p class="muted">Phân loại ghi nhận trong Bách khoa · {classification ?? 'Chưa xác minh'}</p>
+          {traitLevels.length ? <ul class="level-list">{traitLevels.map(({ required_count, effect }) =>
+            <li><strong>Mốc {required_count}</strong><p>{effect}</p></li>
+          )}</ul> : <FieldNote field={record.fields.levels} />}
+        </section>
+        <section class="content-block">
+          <h2>Quân cờ liên quan</h2>
+          {record.members.length ? <ul class="profile-link-grid">
+            {record.members.map((id) => {
+              const member = recordById.get(id);
+              return member && <li><a href={member.href}><GameImage record={member} slot="portrait" shape="badge" />{recordTitle(member)}</a></li>;
+            })}
+          </ul> : <p class="muted">Chưa ghi nhận quân cờ có liên kết này.</p>}
+        </section>
+      </>}
+
+      {category === 'equipment' && <section class="content-block">
+        <h2>Chỉ số và nội tại</h2>
+        <p>{summary}</p>
+        <dl class="profile-fields">
+          <div>
+            <dt>Nội tại</dt>
+            <dd>{passive}<FieldNote field={record.fields.passive_description} /></dd>
+          </div>
+          <div>
+            <dt>Chỉ số bổ sung</dt>
+            <dd>
+              {stats.length > 0 && <ul>{stats.map(({ label, valueText }) => <li>{label} · {valueText}</li>)}</ul>}
+              <FieldNote field={record.fields.stats} />
+            </dd>
+          </div>
+          {record.equipmentSupplement?.effectText && record.equipmentSupplement.effectText !== passive && (
+            <div>
+              <dt>Ghi chú bổ sung</dt>
+              <dd>
+                {record.equipmentSupplement.effectText}
+                <small class="field-note">Do người dùng bổ sung · chưa xác minh trong game</small>
+              </dd>
+            </div>
+          )}
+        </dl>
+        {record.equipmentSupplement?.notes.map((note) => <p class="source-note" data-supplement-issue={note.status}>{note.text}</p>)}
+      </section>}
+
+      {category === 'augments' && <section class="content-block">
+        <h2>Hiệu ứng</h2>
+        <p>{textDescription}</p>
+        <FieldNote field={record.fields.description} />
+        <p class="muted">Nhãn trong Bách khoa · {record.quality ?? 'Chưa xác minh'}</p>
+      </section>}
+
+      {category === 'quests' && <section class="content-block">
+        <h2>Điều kiện và phần thưởng</h2>
+        <p>{textDescription}</p>
+        <ul class="reward-list">
+          {rewards.map((reward, index) => {
+            const target = reward.target_id ? recordById.get(reward.target_id) : undefined;
+            const gold = reward.reward_type === 'gold';
+            return (
+              <li>
+                {gold ? <GoldReward quantity={reward.quantity} /> : <GameImage record={record} slot={`reward:${index}`} />}
+                <div>
+                  {target ? <a href={target.href}>{reward.reward_name}</a> : <strong>{gold ? 'Vàng' : reward.reward_name}</strong>}
+                  <p>{reward.quantity == null ? 'Chưa xác minh số lượng' : `Số lượng ${reward.quantity}`}</p>
+                  {reward.quantity_is_default && <small class="field-note">Số lượng mặc định theo quy ước thư viện · chưa xác minh trong game</small>}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </section>}
+
+      {guide && <section class="content-block guide-content">
+        <GuideSections sections={guideSections(record)} />
+      </section>}
+
+      <aside class="profile-source">
+        <p>{record.auxiliary ? 'Hồ sơ bổ sung từ bản ghi Bách khoa Cờ Liên Quân.' : 'Dữ liệu quan sát từ Bách khoa Cờ Liên Quân.'} Mùa chưa xác minh.</p>
+        {record.missing.length > 0 && <details>
+          <summary>Các mục chưa xác minh trong dữ liệu gốc</summary>
+          <ul>{record.missing.map(({ field }) => <li>{fieldLabels[field] ?? field}</li>)}</ul>
+        </details>}
+        <a href="/du-lieu/">Xem nguồn và mức xác minh</a>
+      </aside>
+    </div>
+  </article>
+</SiteLayout>
+
+<script>
+  const starPanel = document.querySelector('[data-star-panel]');
+  const starPicker = starPanel?.querySelector<HTMLElement>('[data-star-picker]');
+  if (starPicker) {
+    starPicker.hidden = false;
+    starPicker.addEventListener('change', (event) => {
+      if (!(event.target instanceof HTMLInputElement)) return;
+      const level = event.target.value;
+      for (const cell of starPanel?.querySelectorAll<HTMLElement>('[data-star]') ?? []) {
+        cell.classList.toggle('selected-star', cell.dataset.star === level);
+      }
+    });
+  }
+</script>

@@ -1,0 +1,13 @@
+---
+import type { Field } from '../lib/library';
+interface Props { field?: Field }
+const { field } = Astro.props;
+const labels = {
+  VERIFIED: 'Đã xác minh từ nguồn quan sát',
+  UNVERIFIED: 'Chưa xác minh',
+  NOT_APPLICABLE: 'Không áp dụng',
+  USER_PROVIDED: 'Do người dùng bổ sung · chưa xác minh trong game',
+};
+---
+
+<small class="field-note">{labels[field?.state ?? 'UNVERIFIED']}</small>

@@ -1,0 +1,19 @@
+---
+import { categories, libraryCategories, type Category } from '../lib/library';
+interface Props {
+  current?: Category;
+}
+const { current } = Astro.props;
+---
+
+<nav class="library-nav" aria-label="Danh mục thư viện">
+  <ul>
+    {libraryCategories.map((category) => (
+      <li>
+        <a href={categories[category].path} aria-current={current === category ? 'page' : undefined}>
+          {categories[category].title}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

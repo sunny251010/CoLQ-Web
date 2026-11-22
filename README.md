@@ -1,6 +1,6 @@
-# CoLQ 2.0
+# Cẩm Nang Cờ Liên Quân
 
-Website cộng đồng Cờ Liên Quân. Nền ứng dụng M0 nằm trong repository local dành cho `sunny251010/CoLQ-Web`. Repo `sunny251010/CoLQ` là nguồn tham chiếu cho dữ liệu thư viện, URL và logic đã có.
+Website cộng đồng Cờ Liên Quân trên CoLQ-Web. Thư viện tĩnh dùng dữ liệu quan sát từ repo `sunny251010/CoLQ` và URL ảnh từ manifest R2 đã ghim.
 
 ## Chạy local
 
@@ -16,21 +16,30 @@ Mở `http://localhost:4321/`. Kiểm tra kiểu và xem bản build bằng các
 ```powershell
 npm.cmd run check
 npm.cmd run build
+npm.cmd run verify:build
 npm.cmd run preview
 ```
+
+Các trang tra cứu gồm `/thu-vien/`, `/quan-co/`, `/phe-nghe/`, `/trang-bi/`, `/chuc-phuc/` và `/nhiem-vu/`. `/huong-dan/` giữ ba hướng dẫn cũ, còn `/gioi-thieu/` giữ các liên kết tới từng phần hướng dẫn.
+
+## Cấu hình SEO
+
+Build mặc định dùng chế độ staging và gắn `noindex, follow`. Khi chuẩn bị bản production, đặt `COLQ_ENV=production` cùng `COLQ_SITE_URL` là origin HTTPS chính thức. Build sẽ dừng nếu thiếu origin hoặc origin sai định dạng. Canonical và sitemap được sinh từ origin đã cấu hình. Trang 404 và các trang chưa có nghiệp vụ vẫn dùng `noindex`.
 
 ## Cấu trúc và quy ước
 
 | Đường dẫn | Vai trò |
 | --- | --- |
-| `src/pages/` | Sáu điểm vào công khai và trang 404, định tuyến theo file |
+| `src/pages/` | Sáu điểm vào, danh mục, hồ sơ, 404 và endpoint JSON/SEO tĩnh |
 | `src/layouts/SiteLayout.astro` | Metadata, điều hướng desktop/mobile, nội dung chính và footer |
 | `src/components/SiteNav.astro` · `src/navigation.ts` | Component điều hướng và danh sách nhãn/URL dùng chung |
-| `src/styles/site.css` | Tokens Dark Gaming UI, typography, spacing, focus và breakpoint |
+| `src/styles/site.css` | Tokens Dark Gaming UI, layout tra cứu, focus và breakpoint |
+| `src/lib/` · `data/legacy/` | Kiểu dữ liệu và snapshot thư viện, manifest R2 và provenance theo SHA-256 |
+| `scripts/verify-*.mjs` | Kiểm tra hash, ID, quan hệ, ảnh, URL và SEO của bản build |
 | `docs/planning/` | Đặc tả, wireframe và prompt milestone |
 | `docs/architecture/` | Audit, kiểm kê, kiến trúc và tiêu chí M1 |
 
 - Đặt URL công khai bằng tiếng Việt không dấu, nhất quán dấu `/` cuối đường dẫn. Dùng `lang="vi"` và nhãn tiếng Việt cho giao diện.
 - Dùng TypeScript strict cho logic và component `.astro` với CSS native cho HTML tĩnh. Tái sử dụng tokens cho màu, khoảng cách và focus.
-- Giữ lockfile trong Git. Chạy `check` và `build` trước khi hoàn thành thay đổi. Bản M0 đánh dấu các trang `noindex, nofollow` vì nội dung đang ở giai đoạn chuẩn bị.
-- Kiểm tra phạm vi tại [ROADMAP](ROADMAP.md) và [DECISIONS](DECISIONS.md). Kết quả chạy thực tế nằm tại [audit M0](docs/architecture/m0-audit.md).
+- Giữ lockfile trong Git. Chạy `check`, `build` và `verify:build` trước khi hoàn thành thay đổi.
+- Kiểm tra phạm vi tại [ROADMAP](ROADMAP.md) và [DECISIONS](DECISIONS.md). Xem [audit M0](docs/architecture/m0-audit.md) và [checklist M1](docs/architecture/m1-checklist.md).

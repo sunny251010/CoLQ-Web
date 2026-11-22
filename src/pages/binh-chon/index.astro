@@ -1,9 +1,5 @@
 ---
-import SiteLayout from '../../layouts/SiteLayout.astro';
-const description = 'Chưa có cuộc bình chọn nào được mở.';
+import SectionLanding from '../../components/SectionLanding.astro';
 ---
 
-<SiteLayout title="Bình chọn" description={description}>
-  <h1 class="page-title">Bình chọn</h1>
-  <p class="page-description">{description}</p>
-</SiteLayout>
+<SectionLanding title="Bình chọn" description="Bình chọn yêu thích dành cho quân cờ, lõi và trang bị." status="Chưa có cuộc bình chọn đang mở" note="Bạn có thể xem các hồ sơ trong thư viện Cờ Liên Quân." href="/thu-vien/" linkLabel="Mở thư viện" />

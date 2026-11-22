@@ -3,8 +3,8 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 const description = 'Đường dẫn này không có trang tương ứng.';
 ---
 
-<SiteLayout title="Không tìm thấy trang" description={description}>
+<SiteLayout title="Không tìm thấy trang" description={description} indexable={false}>
   <h1 class="page-title">Không tìm thấy trang</h1>
   <p class="page-description">{description}</p>
-  <div class="page-links"><a href="/">Về trang chủ</a></div>
+  <div class="page-links"><a href="/">Về trang chủ</a><a href="/thu-vien/">Tìm trong thư viện</a></div>
 </SiteLayout>

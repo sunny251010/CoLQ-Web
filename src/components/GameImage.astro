@@ -1,0 +1,29 @@
+---
+import { catalog, imagesById, type LibraryRecord } from '../lib/library';
+
+interface Props {
+  record: LibraryRecord;
+  slot: string;
+  shape?: 'icon' | 'portrait' | 'badge';
+  eager?: boolean;
+  alt?: string;
+  optional?: boolean;
+}
+const { record, slot, shape = 'icon', eager = false, alt = '', optional = false } = Astro.props;
+const image = imagesById.get(record.id)?.[slot];
+const initials = record.name.split(/\s+/).slice(0, 2).map((word) => word[0]).join('');
+---
+
+{(image || !optional) && <span class:list={['game-image', `game-image--${shape}`]} data-image-slot={slot}>
+  <span class="image-fallback" aria-hidden="true">{initials}</span>
+  {image && <img
+    src={`${catalog.publicAssetOrigin}/${image.key}`}
+    width={image.width}
+    height={image.height}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    alt={alt}
+    data-game-image
+    data-asset-id={image.assetId}
+  />}
+</span>}

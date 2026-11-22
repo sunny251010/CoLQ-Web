@@ -1,6 +1,6 @@
 # Quyết định CoLQ 2.0
 
-Phạm vi hiện hành là M0. Chủ dự án duyệt trước khi bắt đầu M1. Yêu cầu M0 ngày 22/11/2026 ưu tiên hơn phần planning cũ khi có mâu thuẫn.
+Phạm vi hiện hành là M1 local. Chủ dự án đã duyệt push M0 lên `main`. M1 được giữ trên nhánh local `m1/library` để nghiệm thu trước khi phát hành.
 
 | Trạng thái | Quyết định |
 | --- | --- |
@@ -10,9 +10,11 @@ Phạm vi hiện hành là M0. Chủ dự án duyệt trước khi bắt đầu 
 | CONFIRMED | Cloudflare-first với Workers, D1 cho dữ liệu động và R2 cho ảnh. M0 kiểm tra local, các thay đổi và triển khai từ xa cần quyền riêng. |
 | CONFIRMED | Google là phương thức đăng nhập đầu tiên. Creator theo lời mời, tự đăng, tự gắn tier và sửa bài của mình. Admin xử lý vi phạm và có audit. |
 | CONFIRMED | Bình chọn yêu thích trước bình chọn sức mạnh. Có tối đa một phiếu mỗi tài khoản/cuộc, đổi được khi đang mở. Theo dõi Creator sau reaction và bình luận. |
-| PROPOSED | Giữ URL thư viện cũ làm URL ổn định nếu khả thi. Duyệt cách xử lý `/huong-dan/` và từng URL cần chuyển sau audit. |
-| OPEN | Quyền dùng ảnh ở CoLQ-Web, quyền phát hành repo và môi trường staging. Phạm vi của phân loại mùa và quy tắc Builder cần nguồn game bổ sung. |
-| PROPOSED | Dùng bản sửa local đã kiểm kê cho SVG thưởng vàng và liên kết toàn ô trang bị làm đầu vào M1. Ghim bản diff hoặc snapshot trước khi port. |
+| CONFIRMED | Tên hiển thị là Cẩm Nang Cờ Liên Quân. Tên repo và package kỹ thuật là CoLQ-Web. |
+| CONFIRMED | M1 dùng URL ảnh từ manifest R2 hiện có trên local, giữ liên kết toàn ô trang bị và SVG thưởng vàng đã sửa ở CoLQ cũ. |
+| CONFIRMED | M1 thực hiện local và nghiệm thu trước khi push lên `main`. Các tài nguyên Cloudflare cũ chỉ đọc trong phạm vi này. |
+| CONFIRMED | Giữ URL chi tiết, danh mục, JSON và anchor hữu ích của thư viện cũ. `/huong-dan/` phục vụ landing mới có lối vào ba bài cũ. |
+| OPEN | Quyền dùng ảnh công khai của CoLQ-Web, host production, host staging và phạm vi dữ liệu mùa hoặc Builder cần nguồn bổ sung. |
 | OPEN | Cặp phiên bản adapter/Workers, thư viện auth, phương án schema/migrations và editor cần spike. Google OAuth staging cần callback và thông tin xác thực do chủ dự án quản lý. |
 | DEFERRED | Auth, Creator Studio và nội dung động từ M2. Tương tác từ M3, bình chọn ở M4/M6 và Builder theo dữ liệu thực ở M5. |
 

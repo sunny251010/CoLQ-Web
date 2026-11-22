@@ -1,9 +1,32 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-const description = 'Dữ liệu thư viện đang được chuẩn bị.';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CatalogSearch from '../../components/CatalogSearch.astro';
+import LibraryDirectory from '../../components/LibraryDirectory.astro';
+import { catalog, categories, records, recordSummary, recordTitle } from '../../lib/library';
+import { normalizeSearch } from '../../lib/search';
+const description = 'Tra cứu quân cờ, Phe/Nghề, trang bị, lõi và nhiệm vụ theo dữ liệu Bách khoa đã quan sát.';
 ---
 
 <SiteLayout title="Thư viện" description={description}>
-  <h1 class="page-title">Thư viện</h1>
-  <p class="page-description">{description}</p>
+  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện' }]} />
+  <header class="page-heading">
+    <h1 class="page-title">Thư viện Cờ Liên Quân</h1>
+    <p class="page-description">{description} Mùa của bản ghi chưa được xác minh.</p>
+  </header>
+  <CatalogSearch label="Tìm toàn thư viện" count={records.length} onlyWithQuery>
+    <ul class="compact-results">
+      {records.map((record) => (
+        <li data-record-id={record.id} data-search={normalizeSearch([record.name, categories[record.category].title, recordSummary(record), ...record.traits.map(({ name }) => name)].join(' '))}>
+          <a href={record.href}>{recordTitle(record)}</a>
+          <span>{categories[record.category].title}</span>
+        </li>
+      ))}
+    </ul>
+  </CatalogSearch>
+  <section class="home-section" aria-labelledby="library-directory">
+    <div class="section-heading"><h2 id="library-directory">Duyệt theo danh mục</h2><span class="muted">{catalog.counts.total} hồ sơ chính</span></div>
+    <LibraryDirectory />
+  </section>
+  <p class="page-links"><a href="/gioi-thieu/">Giới thiệu và luật chơi</a><a href="/du-lieu/">Nguồn và mức xác minh</a></p>
 </SiteLayout>

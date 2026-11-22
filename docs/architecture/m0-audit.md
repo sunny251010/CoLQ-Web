@@ -4,7 +4,7 @@ Ngày 22/11/2026. Phạm vi là audit chỉ đọc hệ thống cũ và bootstra
 
 ## Git và nguồn bằng chứng
 
-- Repo local dành cho `CoLQ-Web` có nhánh `main` ở `E:\CoLQ` và `origin` đặt theo `https://github.com/sunny251010/CoLQ-Web.git`. `git ls-remote` với thông tin xác thực hiện có trả `Repository not found`. Phần GitHub chưa hoàn tất, các file M0 nằm local và chưa có commit.
+- Khi audit, repo local có nhánh `main` ở `E:\CoLQ` và chưa xác minh được GitHub. Sau khi chủ dự án tạo repository, đã chạy lại kiểm tra kiểu, build, Chrome smoke test, `git diff --cached --check` và Gitleaks. Đã push M0 và xác minh SHA của `refs/heads/main`. [Commit M0 trên CoLQ-Web](https://github.com/sunny251010/CoLQ-Web/commit/8b90f8f36b395671e1f92935a0e3c6ce636a1bd2)
 - Repo `CoLQ` có `origin/main` và checkout local cùng commit `4b1bbe87b30a401a1f9c9b03fa8bc3965805be75`. Mọi build/test dùng snapshot tạm. Trang cũ khai báo Workers Static Assets từ `dist`, service ảnh dùng Worker riêng với binding R2 và cache immutable. Trạng thái local ba file chỉnh sửa được kiểm kê bằng Git index sao tạm và thao tác chỉ đọc. [Repo tham chiếu](https://github.com/sunny251010/CoLQ)
 - Đã dùng `GET` cho 9 trang công khai và 2 URL JSON, tất cả HTTP 200. SHA-256 của `/data/library.json` trùng bản build cũ (`125f36da10cfa84e89cfc13e0af3699c212fadd139db8f9d2ba025a4332f3739`). [Thư viện đang phục vụ](https://colq.sunny-contact-251010.workers.dev/quan-co/)
 - Chỉ mục có 227 dòng gồm 221 đầu ra HTML của snapshot (211 chi tiết, 9 landing và `404.html`), 2 URL JSON cũ và 4 landing mới có đường dẫn riêng. Đã kiểm tra 9 landing qua HTTP live. Các detail dựa trên build đã kiểm tra link nội bộ và chưa gọi từng URL live. [Chỉ mục URL](url-inventory.csv)

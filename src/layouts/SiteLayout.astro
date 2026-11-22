@@ -5,9 +5,14 @@ import '../styles/site.css';
 interface Props {
   title: string;
   description: string;
+  current?: string;
+  indexable?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, current, indexable = true } = Astro.props;
+const brand = 'Cẩm Nang Cờ Liên Quân';
+const documentTitle = Astro.url.pathname === '/' ? brand : `${title} | ${brand}`;
+const canonical = Astro.site && indexable ? new URL(Astro.url.pathname, Astro.site) : undefined;
 ---
 
 <!doctype html>
@@ -16,27 +21,49 @@ const { title, description } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="robots" content="noindex, nofollow" />
+    {!canonical && <meta name="robots" content="noindex, follow" />}
+    {canonical && <>
+      <link rel="canonical" href={canonical} />
+      <meta property="og:url" content={canonical} />
+    </>}
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={brand} />
+    <meta property="og:locale" content="vi_VN" />
     <link rel="icon" href="data:," />
-    <title>{title} | CoLQ</title>
+    <title>{documentTitle}</title>
   </head>
   <body>
     <a class="skip-link" href="#noi-dung">Đến nội dung chính</a>
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href="/" aria-label="CoLQ, trang chủ">CoLQ</a>
-        <div class="desktop-nav"><SiteNav /></div>
+        <a class="brand" href="/" aria-label={`${brand}, trang chủ`}>
+          <span class="brand-mark" aria-hidden="true">♞</span>
+          <span>Cẩm Nang<strong>Cờ Liên Quân</strong></span>
+        </a>
+        <div class="desktop-nav"><SiteNav current={current} /></div>
         <details class="mobile-nav">
           <summary>Menu</summary>
-          <SiteNav />
+          <SiteNav current={current} />
         </details>
       </div>
     </header>
     <main class="container" id="noi-dung" tabindex="-1">
+      <span id="main"></span>
       <slot />
     </main>
     <footer class="site-footer">
-      <div class="container">CoLQ là dự án cộng đồng Cờ Liên Quân do người hâm mộ xây dựng.</div>
+      <div class="container footer-inner">
+        <div>
+          <strong>{brand}</strong>
+          <p>Dự án cộng đồng độc lập của người hâm mộ Cờ Liên Quân.</p>
+        </div>
+        <nav aria-label="Thông tin bổ sung">
+          <a href="/thu-vien/">Thư viện</a>
+          <a href="/du-lieu/">Nguồn dữ liệu</a>
+          <a href="/lien-he/">Liên hệ / Báo lỗi</a>
+        </nav>
+      </div>
     </footer>
   </body>
 </html>
@@ -60,10 +87,28 @@ const { title, description } = Astro.props;
     display: inline-flex;
     align-items: center;
     min-height: var(--target-min);
-    font-size: 1.35rem;
-    font-weight: 750;
-    color: var(--color-accent);
+    gap: var(--space-2);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--color-muted);
     text-decoration: none;
+  }
+
+  .brand strong {
+    display: block;
+    font-size: 1rem;
+    color: var(--color-text);
+  }
+
+  .brand-mark {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius);
+    color: var(--color-accent);
+    font-size: 1.5rem;
   }
 
   .desktop-nav {
@@ -98,7 +143,11 @@ const { title, description } = Astro.props;
   }
 
   main {
-    padding-block: clamp(2.5rem, 9vw, 7rem);
+    padding-block: clamp(1.25rem, 4vw, 3.5rem) clamp(3rem, 6vw, 5rem);
+  }
+
+  #main {
+    display: block;
   }
 
   .site-footer {
@@ -108,12 +157,24 @@ const { title, description } = Astro.props;
     font-size: 0.875rem;
   }
 
+  .footer-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-5);
+    flex-wrap: wrap;
+  }
+
+  .footer-inner strong { color: var(--color-text); }
+  .footer-inner p { margin-block: var(--space-1) 0; }
+  .footer-inner nav { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); }
+  .footer-inner a { display: inline-flex; align-items: center; min-height: var(--target-min); }
+
   @media (min-width: 64rem) {
     .header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 4rem;
+      min-height: 4.5rem;
     }
 
     .brand {
@@ -125,3 +186,27 @@ const { title, description } = Astro.props;
     .mobile-nav { display: none; }
   }
 </style>
+
+<script>
+  function hideBrokenImage(target: EventTarget | null) {
+    if (target instanceof HTMLImageElement && target.hasAttribute('data-game-image')) {
+      target.hidden = true;
+    }
+  }
+
+  document.addEventListener('error', (event) => hideBrokenImage(event.target), true);
+  for (const image of document.querySelectorAll<HTMLImageElement>('img[data-game-image]')) {
+    if (image.complete && !image.naturalWidth) hideBrokenImage(image);
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey || event.defaultPrevented) return;
+    const target = event.target;
+    if (target instanceof Element && target.closest('input, select, textarea, [contenteditable]')) return;
+    const search = document.querySelector<HTMLInputElement>('input[type="search"]');
+    if (search) {
+      event.preventDefault();
+      search.focus();
+    }
+  });
+</script>

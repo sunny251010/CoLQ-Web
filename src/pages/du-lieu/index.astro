@@ -1,0 +1,28 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { catalog, recordTitle } from '../../lib/library';
+const partial = catalog.records.filter((record) => record.status === 'PARTIAL');
+---
+
+<SiteLayout title="Nguồn và mức xác minh" description="Xem phiên dữ liệu, quyền sử dụng ảnh và các hồ sơ Cờ Liên Quân còn mục chưa xác minh." current="/thu-vien/">
+  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện', href: '/thu-vien/' }, { label: 'Nguồn dữ liệu' }]} />
+  <header class="page-heading">
+    <h1 class="page-title">Nguồn và mức xác minh</h1>
+    <p class="page-description">Thư viện ghi lại nội dung quan sát được từ Bách khoa Cờ Liên Quân. Mùa giải của bản ghi vẫn chưa xác minh.</p>
+  </header>
+  <section class="content-block guide-content">
+    <h2>Phiên dữ liệu</h2>
+    <p>Ứng dụng {catalog.application} · Bản dữ liệu <code>{catalog.version}</code>.</p>
+    <p>{catalog.counts.COMPLETE} hồ sơ chính đủ nội dung quan sát và {catalog.counts.PARTIAL} hồ sơ chính còn mục chưa xác minh. Hồ sơ phụ Gươm hiền triết nằm ngoài tổng {catalog.counts.total} hồ sơ chính.</p>
+    <p>Ảnh được lấy từ manifest R2 hiện có. Quyền sử dụng ảnh của trò chơi chưa được xác minh.</p>
+    <ul class="plain-links">
+      <li><a href="/data/provenance.json">Nguồn quan sát và thông tin bổ sung (JSON)</a></li>
+      <li><a href="/data/library.json">Danh mục thư viện (JSON)</a></li>
+    </ul>
+  </section>
+  <section class="content-block">
+    <h2>Hồ sơ còn mục chưa xác minh</h2>
+    <ul class="profile-link-grid">{partial.map((record) => <li><a href={record.href}>{recordTitle(record)}</a></li>)}</ul>
+  </section>
+</SiteLayout>

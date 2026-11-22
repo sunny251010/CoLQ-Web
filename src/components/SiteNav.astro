@@ -1,14 +1,17 @@
 ---
 import { navigation } from '../navigation';
 
-const { pathname } = Astro.url;
+interface Props {
+  current?: string;
+}
+const { current = Astro.url.pathname } = Astro.props;
 ---
 
 <nav aria-label="Điều hướng chính">
   <ul>
     {navigation.map(({ href, label }) => (
       <li>
-        <a href={href} aria-current={pathname === href ? 'page' : undefined}>{label}</a>
+        <a href={href} aria-current={current === href ? (Astro.url.pathname === href ? 'page' : 'true') : undefined}>{label}</a>
       </li>
     ))}
   </ul>
@@ -34,12 +37,12 @@ const { pathname } = Astro.url;
   }
 
   a:hover,
-  a[aria-current='page'] {
+  a[aria-current] {
     color: var(--color-accent);
     background: var(--color-raised);
   }
 
-  a[aria-current='page'] {
+  a[aria-current] {
     text-decoration: underline;
     text-underline-offset: 0.25em;
   }
