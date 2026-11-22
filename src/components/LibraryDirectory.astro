@@ -1,0 +1,19 @@
+---
+import { catalog, categories, libraryCategories } from '../lib/library';
+---
+
+<ul class="directory-grid">
+  {libraryCategories.map((key) => {
+    const entry = categories[key];
+    return (
+      <li>
+        <a class="directory-item" href={entry.path}>
+          <span class="directory-glyph" aria-hidden="true">{entry.glyph}</span>
+          <strong>{entry.title}</strong>
+          <span class="directory-count">{catalog.counts[key]} hồ sơ</span>
+          <span class="directory-summary">{entry.summary}</span>
+        </a>
+      </li>
+    );
+  })}
+</ul>

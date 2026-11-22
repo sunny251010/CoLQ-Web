@@ -4,6 +4,12 @@
 
 Nguồn commit `4b1bbe87b30a401a1f9c9b03fa8bc3965805be75`, phiên `lq-encyclopedia-observed-v1`, ứng dụng quan sát `1.64.1.11`, mùa `UNKNOWN`. Bản build snapshot đọc và kiểm tra hash từng file theo `data/current.json` và manifest nguồn. Hash manifest nguồn `883aa709ee2646ae57b6ae3eb03aa7bfcfe2f38a8712401bc99c4d5e483b9186`.
 
+## Dữ liệu được đưa vào M1
+
+`data/legacy/` giữ nguyên byte của `library.json` và `provenance.json` đã được adapter CoLQ kiểm tra rồi xuất công khai, cùng một bản manifest ảnh R2. Hai nguồn bổ sung trang bị đã được adapter cũ ghép vào thư viện và provenance xuất ra. Bản JSON nguyên thủy và bằng chứng nghiên cứu tiếp tục được tra cứu chỉ đọc từ CoLQ. Cách này giữ đúng dữ liệu từng công bố và tránh có thêm một bản nguồn phải đồng bộ trong repo mới.
+
+Lệnh `npm.cmd run verify:data` xác minh SHA-256, số hồ sơ theo loại và trạng thái, URL/ID, quan hệ Phe/Nghề và phần thưởng, hai Volkath và 744 vị trí ảnh. `src/lib/library.ts` mô tả kiểu dùng trong Astro. Các trang HTML sử dụng model ở build. Trình duyệt tải ảnh qua manifest và lọc từ HTML, còn hai URL JSON legacy phục vụ đúng byte của snapshot.
+
 | Loại | File nguồn cùng phiên | Số hồ sơ | Điều kiện khi chuyển |
 | --- | --- | ---: | --- |
 | Quân cờ | `heroes.json` | 58 | Giữ hai ID Volkath 5/6 vàng và trạng thái riêng của các trường thiếu |

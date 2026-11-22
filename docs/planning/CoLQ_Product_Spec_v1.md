@@ -1,7 +1,7 @@
 # CoLQ 2.0 — Product / UX / Technical Specification v1.0
 
 - **Ngày:** 22/11/2026
-- **Trạng thái:** Đặc tả sản phẩm CoLQ 2.0. Theo dõi tiến độ tại [ROADMAP](../../ROADMAP.md) và các quyết định tại [DECISIONS](../../DECISIONS.md).
+- **Trạng thái:** Đặc tả sản phẩm CoLQ 2.0. Tên hiển thị là **Cẩm Nang Cờ Liên Quân**. Theo dõi tiến độ tại [ROADMAP](../../ROADMAP.md) và các quyết định tại [DECISIONS](../../DECISIONS.md).
 - **Repo triển khai:** `sunny251010/CoLQ-Web`
 - **Repo tham chiếu chỉ đọc:** `sunny251010/CoLQ`
 - **Production tham chiếu:** `https://colq.sunny-contact-251010.workers.dev/quan-co/`
@@ -62,6 +62,8 @@
 ```
 
 **URL stability:** Không thay URL thư viện đang có nếu không cần; giữ đường dẫn cũ và 301 mapping nếu buộc chuyển. Post slug có id ngắn tránh đụng nhau. Dữ liệu mùa thực tế phải được xác minh; `s3-2026` chỉ là ví dụ.
+
+M1 giữ route lịch sử dưới `/quan-co/`, `/phe-nghe/`, `/trang-bi/`, `/chuc-phuc/` và `/nhiem-vu/`. Các đường dẫn `/thu-vien/*` trong sitemap dự kiến mô tả nhóm nội dung. Trang `/thu-vien/` liên kết đến các URL lịch sử thực tế.
 
 ## D. Wireframes chi tiết — desktop và mobile
 

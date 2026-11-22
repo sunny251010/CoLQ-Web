@@ -1,9 +1,29 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-const description = 'Chưa có bài hướng dẫn được xuất bản.';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { guides, recordSummary } from '../../lib/library';
+const description = 'Đọc ba bài hướng dẫn từ thư viện Cờ Liên Quân về luật chơi và các cơ chế đã quan sát.';
 ---
 
 <SiteLayout title="Hướng dẫn & Mẹo" description={description}>
-  <h1 class="page-title">Hướng dẫn &amp; Mẹo</h1>
-  <p class="page-description">{description}</p>
+  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Hướng dẫn & Mẹo' }]} />
+  <header class="page-heading">
+    <h1 class="page-title">Hướng dẫn &amp; Mẹo</h1>
+    <p class="page-description">{description}</p>
+  </header>
+  <section aria-labelledby="archive-guides">
+    <div class="section-heading">
+      <h2 id="archive-guides">Hướng dẫn từ Bách khoa</h2>
+      <a href="/gioi-thieu/">Đọc phần giới thiệu</a>
+    </div>
+    <div class="guide-content">
+      {guides.map((guide) => (
+        <article class="content-block">
+          <h3><a href={guide.href}>{guide.name}</a></h3>
+          <p class="muted">{recordSummary(guide)}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+  <p class="muted">Chưa có bài mới từ tác giả cộng đồng.</p>
 </SiteLayout>

@@ -1,0 +1,118 @@
+---
+interface Filter {
+  name: string;
+  label: string;
+  options: { value: string; label: string }[];
+}
+interface Props {
+  label: string;
+  count: number;
+  filters?: Filter[];
+  onlyWithQuery?: boolean;
+}
+const { label, count, filters = [], onlyWithQuery = false } = Astro.props;
+---
+
+<div data-catalog data-only-with-query={onlyWithQuery ? 'true' : 'false'}>
+  <form class="catalog-filters" data-filters role="search" hidden>
+    <div class="filter-field search-field">
+      <label for="catalog-q">{label}</label>
+      <input id="catalog-q" type="search" name="q" placeholder="Nhập tên hoặc từ khóa…" autocomplete="off" />
+    </div>
+    {filters.map(({ name, label, options }) => (
+      <div class="filter-field">
+        <label for={`catalog-${name}`}>{label}</label>
+        <select id={`catalog-${name}`} name={name}>
+          <option value="">Tất cả</option>
+          {options.map((option) => <option value={option.value}>{option.label}</option>)}
+        </select>
+      </div>
+    ))}
+    <button type="reset" class="button button--quiet">Đặt lại</button>
+  </form>
+  <noscript><p class="muted">Bạn vẫn có thể duyệt danh mục và mở từng hồ sơ. Bật JavaScript để tìm và lọc trên trang này.</p></noscript>
+  <div data-search-results hidden={onlyWithQuery}>
+    <p class="results-count" data-result-count role="status">{count} hồ sơ</p>
+    <slot />
+    <div class="empty-state" data-empty hidden>
+      <h2>Không tìm thấy hồ sơ phù hợp</h2>
+      <p>Thử một tên khác hoặc đặt lại bộ lọc.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { normalizeSearch } from '../lib/search';
+
+  for (const catalog of document.querySelectorAll<HTMLElement>('[data-catalog]')) {
+    const form = catalog.querySelector<HTMLFormElement>('[data-filters]');
+    const results = catalog.querySelector<HTMLElement>('[data-search-results]');
+    const count = catalog.querySelector<HTMLElement>('[data-result-count]');
+    const empty = catalog.querySelector<HTMLElement>('[data-empty]');
+    if (!form || !results || !count || !empty) continue;
+
+    const inputs = [...form.querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')];
+    const items = [...results.querySelectorAll<HTMLElement>('[data-record-id]')];
+    const groups = [...results.querySelectorAll<HTMLElement>('[data-filter-group]')];
+
+    function syncFromUrl() {
+      const params = new URLSearchParams(location.search);
+      for (const input of inputs) input.value = params.get(input.name) ?? '';
+    }
+
+    function update(writeUrl = true) {
+      if (!form || !results || !count || !empty) return;
+      const values = new URLSearchParams();
+      for (const { name, value } of inputs) if (value.trim()) values.set(name, value.trim());
+      const query = normalizeSearch(values.get('q') ?? '');
+      results.hidden = catalog.dataset.onlyWithQuery === 'true' && !values.has('q');
+      let visibleCount = 0;
+      for (const item of items) {
+        item.hidden = !item.dataset.search?.includes(query) || inputs.some(({ name }) => {
+          const value = values.get(name);
+          if (name === 'q' || !value) return false;
+          const comparison = item.dataset[name];
+          return name === 'trait' || name === 'reward'
+            ? !comparison?.split(' ').includes(value)
+            : comparison !== value;
+        });
+        if (!item.hidden) visibleCount++;
+      }
+      for (const group of groups) {
+        const groupCount = group.querySelectorAll('[data-record-id]:not([hidden])').length;
+        group.hidden = groupCount === 0;
+        const total = group.querySelector('[data-group-count]');
+        if (total) total.textContent = String(groupCount);
+      }
+      count.textContent = `${visibleCount} / ${items.length} hồ sơ`;
+      empty.hidden = visibleCount !== 0;
+      if (writeUrl) {
+        const url = new URL(location.href);
+        for (const input of inputs) {
+          const value = values.get(input.name);
+          if (value) url.searchParams.set(input.name, value);
+          else url.searchParams.delete(input.name);
+        }
+        if (url.href !== location.href) history.replaceState(null, '', url);
+      }
+    }
+
+    syncFromUrl();
+    update(false);
+    form.hidden = false;
+    form.addEventListener('input', () => update());
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      update();
+    });
+    form.addEventListener('reset', (event) => {
+      event.preventDefault();
+      for (const input of inputs) input.value = '';
+      update();
+    });
+    window.addEventListener('popstate', () => {
+      syncFromUrl();
+      update(false);
+    });
+  }
+</script>

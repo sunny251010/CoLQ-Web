@@ -1,0 +1,27 @@
+---
+import Breadcrumbs from './Breadcrumbs.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  status: string;
+  note: string;
+  href: string;
+  linkLabel: string;
+}
+const { title, description, status, note, href, linkLabel } = Astro.props;
+---
+
+<SiteLayout title={title} description={description} indexable={false}>
+  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: title }]} />
+  <header class="page-heading">
+    <h1 class="page-title">{title}</h1>
+    <p class="page-description">{description}</p>
+  </header>
+  <section class="empty-state">
+    <h2>{status}</h2>
+    <p>{note}</p>
+    <a class="button" href={href}>{linkLabel}</a>
+  </section>
+</SiteLayout>

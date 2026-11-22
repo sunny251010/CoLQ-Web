@@ -1,0 +1,20 @@
+---
+interface Props {
+  quantity: number | null;
+}
+const { quantity } = Astro.props;
+const amount = quantity != null && Number.isSafeInteger(quantity) && quantity >= 0 ? quantity : null;
+---
+
+<span class="gold-reward" role="img" aria-label={amount === null ? 'Chưa xác minh số vàng' : `${amount} vàng`} data-gold-quantity={amount}>
+  <svg viewBox="0 0 64 64" width="56" height="56" fill="none" aria-hidden="true" focusable="false">
+    <rect x="1" y="1" width="62" height="62" rx="10" fill="#292c58" stroke="#6973a5" stroke-width="1.5" />
+    <ellipse cx="31" cy="46" rx="18" ry="4" fill="#1f2249" />
+    <circle cx="31" cy="28" r="19" fill="#b97824" />
+    <circle cx="31" cy="26" r="18" fill="#ffd97e" />
+    <circle cx="31" cy="26" r="14" fill="#e8ad43" stroke="#a86d25" stroke-width="1.4" />
+    <path d="m31 15 8 11-8 11-8-11Z" fill="#fff0bc" />
+    <path d="M19 17a15 15 0 0 1 13-6" stroke="#fff4d5" stroke-width="2.4" stroke-linecap="round" />
+  </svg>
+  <span class="reward-multiplier" aria-hidden="true">×{amount ?? '?'}</span>
+</span>

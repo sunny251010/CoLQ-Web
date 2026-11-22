@@ -1,0 +1,26 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import GuideSections from '../../components/GuideSections.astro';
+import { guideSections, guides } from '../../lib/library';
+---
+
+<SiteLayout title="Giới thiệu Cờ Liên Quân" description="Luật chơi và các phần hướng dẫn gốc đã quan sát trong thư viện Cờ Liên Quân." current="/thu-vien/">
+  <Breadcrumbs items={[{ label: 'Trang chủ', href: '/' }, { label: 'Thư viện', href: '/thu-vien/' }, { label: 'Giới thiệu' }]} />
+  <header class="page-heading">
+    <h1 class="page-title">Làm quen với Cờ Liên Quân</h1>
+    <p class="page-description">Nội dung hướng dẫn từ thư viện cũ, theo phiên bản Bách khoa đã quan sát.</p>
+  </header>
+  <nav class="section-jumps" aria-label="Nội dung giới thiệu">
+    {guides.map((guide, index) => <a href={`#intro-${index}`}>{guide.name}</a>)}
+  </nav>
+  <div class="guide-content">
+    {guides.map((guide, index) => (
+      <article id={`intro-${index}`} class="content-block">
+        <h2>{guide.name}</h2>
+        <GuideSections sections={guideSections(guide)} titleLevel="h3" />
+        <a href={guide.href}>Mở hồ sơ hướng dẫn</a>
+      </article>
+    ))}
+  </div>
+</SiteLayout>

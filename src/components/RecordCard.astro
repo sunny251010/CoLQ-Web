@@ -1,0 +1,51 @@
+---
+import GameImage from './GameImage.astro';
+import GoldReward from './GoldReward.astro';
+import TraitLinks from './TraitLinks.astro';
+import { augmentTiers, fieldValue, primarySlot, recordSummary, recordTitle, type LibraryRecord, type Reward } from '../lib/library';
+import { normalizeSearch } from '../lib/search';
+
+interface Props {
+  record: LibraryRecord;
+  eager?: boolean;
+}
+const { record, eager = false } = Astro.props;
+const hero = record.category === 'heroes';
+const equipment = record.category === 'equipment';
+const trait = record.category === 'traits';
+const firstReward = fieldValue<Reward[]>(record, 'rewards')?.[0];
+const tier = augmentTiers.find(({ value }) => record.quality === value);
+const classification = fieldValue<string>(record, 'ui_category_label');
+const group = record.equipmentGroup?.id ?? classification;
+const summary = hero ? fieldValue<string>(record, 'skill_name') : recordSummary(record);
+const search = normalizeSearch([
+  record.name, summary, record.equipmentGroup?.label, classification, tier?.label, ...record.traits.map(({ name }) => name),
+].join(' '));
+---
+
+<article
+  class:list={['record-card', hero && 'record-card--hero', equipment && 'equipment-card']}
+  data-category={record.category}
+  data-record-id={record.id}
+  data-search={search}
+  data-price={record.price ?? ''}
+  data-trait={record.traits.map(({ id }) => id).join(' ')}
+  data-group={group ?? ''}
+  data-quality={record.quality ?? ''}
+  data-reward={(fieldValue<Reward[]>(record, 'rewards') ?? []).map(({ reward_type }) => reward_type).join(' ')}
+>
+  {firstReward?.reward_type === 'gold'
+    ? <GoldReward quantity={firstReward.quantity} />
+    : <GameImage record={record} slot={primarySlot(record)} shape={hero ? 'portrait' : 'icon'} eager={eager} />}
+  <div class="record-card-body">
+    <div class="record-card-title">
+      <h3><a class:list={[equipment && 'equipment-card-link']} href={record.href} aria-label={recordTitle(record)}>{record.name}</a></h3>
+      {record.price != null && <span class="price">{record.price} vàng</span>}
+    </div>
+    {classification && <p class="record-meta">{classification} · {record.members.length} quân cờ</p>}
+    {tier && <p class:list={['record-meta', `tier-${tier.tone}`]}>{tier.label}</p>}
+    {summary && !trait && <p class="record-summary">{summary}</p>}
+    {hero && <TraitLinks record={record} />}
+    {record.status === 'PARTIAL' && <p class="record-meta">Còn mục chưa xác minh</p>}
+  </div>
+</article>

@@ -1,14 +1,56 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import GameImage from '../components/GameImage.astro';
+import LibraryDirectory from '../components/LibraryDirectory.astro';
+import { catalog, guides } from '../lib/library';
 
-const description = 'Trang cộng đồng dành cho người chơi Cờ Liên Quân.';
+const description = 'Tra cứu quân cờ, Phe/Nghề, trang bị, lõi và nhiệm vụ trong thư viện cộng đồng Cờ Liên Quân.';
+const featured = ['Violet', 'Nakroth', 'Liliana', 'Airi']
+  .flatMap((name) => catalog.records.filter((record) => record.category === 'heroes' && record.name === name));
 ---
 
 <SiteLayout title="Trang chủ" description={description}>
-  <h1 class="page-title">Cờ Liên Quân</h1>
-  <p class="page-description">{description}</p>
-  <div class="page-links">
-    <a href="/doi-hinh/">Khám phá đội hình</a>
-    <a href="/thu-vien/">Mở thư viện</a>
-  </div>
+  <section class="home-hero" aria-labelledby="home-title">
+    <div class="home-intro">
+      <h1 id="home-title">Cẩm Nang <span>Cờ Liên Quân</span></h1>
+      <p>{description}</p>
+      <form action="/thu-vien/" class="hero-search" role="search">
+        <label for="home-search">Tìm trong thư viện</label>
+        <div>
+          <input id="home-search" name="q" type="search" placeholder="Ví dụ Violet, Pháp sư…" required />
+          <button class="button" type="submit">Tìm kiếm</button>
+        </div>
+      </form>
+      <a class="hero-secondary" href="/gioi-thieu/">Đọc luật chơi và hướng dẫn <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="featured" aria-labelledby="featured-title">
+      <h2 id="featured-title">Hồ sơ quân cờ</h2>
+      <ul class="featured-grid">
+        {featured.map((record, index) => (
+          <li>
+            <a href={record.href}>
+              <GameImage record={record} slot="portrait" shape="portrait" eager={index < 2} />
+              <span><strong>{record.name}</strong><small>{record.price} vàng</small></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="directory-title">
+    <div class="section-heading">
+      <h2 id="directory-title">Khám phá thư viện</h2>
+      <a href="/thu-vien/">Mở thư viện <span aria-hidden="true">→</span></a>
+    </div>
+    <LibraryDirectory />
+  </section>
+
+  <section class="home-section" aria-labelledby="guide-title">
+    <div class="section-heading">
+      <h2 id="guide-title">Hướng dẫn &amp; Mẹo</h2>
+      <a href="/huong-dan/">Xem hướng dẫn <span aria-hidden="true">→</span></a>
+    </div>
+    <ul class="profile-link-grid">{guides.map((record) => <li><a href={record.href}>{record.name}</a></li>)}</ul>
+  </section>
 </SiteLayout>

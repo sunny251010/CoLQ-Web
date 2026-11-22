@@ -1,0 +1,9 @@
+---
+interface Props {
+  sections: { text: string }[];
+  titleLevel?: 'h2' | 'h3';
+}
+const { sections, titleLevel: Title = 'h2' } = Astro.props;
+---
+
+{sections.map(({ text }) => /^\d+\.\s/.test(text) ? <Title>{text}</Title> : <p>{text}</p>)}

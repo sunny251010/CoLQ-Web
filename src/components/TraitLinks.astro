@@ -1,0 +1,22 @@
+---
+import GameImage from './GameImage.astro';
+import { imagesById, recordById, type LibraryRecord } from '../lib/library';
+interface Props { record: LibraryRecord }
+const { record } = Astro.props;
+---
+
+{record.traits.length > 0 ? (
+  <ul class="trait-links" aria-label="Phe và nghề">
+    {record.traits.map(({ id, name }) => {
+      const target = recordById.get(id);
+      const slot = `trait:${name}`;
+      const hasAssociatedIcon = Boolean(imagesById.get(record.id)?.[slot]);
+      return target && (
+        <li><a href={target.href}>
+          <GameImage record={hasAssociatedIcon ? record : target} slot={hasAssociatedIcon ? slot : 'icon'} shape="badge" optional />
+          {name}
+        </a></li>
+      );
+    })}
+  </ul>
+) : <p class="record-meta">Phe/Nghề chưa xác minh</p>}
